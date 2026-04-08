@@ -1,0 +1,698 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SPM Report - Inventory Management System</title>
+    <style>
+      :root {
+        --ink: #2f2a24;
+        --muted: #675f57;
+        --line: #d8d0c6;
+        --paper: #fffdf8;
+        --sage: #d8e4d5;
+        --sky: #dae8ef;
+        --peach: #f5ddd0;
+        --sand: #ece0cf;
+        --rose: #f0ddda;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: #f4eee5;
+        color: var(--ink);
+        font-family: "Book Antiqua", Georgia, serif;
+        line-height: 1.55;
+      }
+
+      .report {
+        width: min(980px, calc(100vw - 32px));
+        margin: 24px auto;
+        background: var(--paper);
+        border: 1px solid var(--line);
+        box-shadow: 0 20px 50px rgba(93, 74, 58, 0.12);
+      }
+
+      .page {
+        padding: 42px 54px;
+        border-bottom: 1px solid #eee5d8;
+      }
+
+      .page-break {
+        break-before: page;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4 {
+        margin: 0 0 10px;
+      }
+
+      h1 {
+        font-size: 34px;
+        line-height: 1.1;
+      }
+
+      h2 {
+        margin-top: 20px;
+        font-size: 25px;
+      }
+
+      h3 {
+        margin-top: 18px;
+        font-size: 19px;
+      }
+
+      p,
+      li {
+        font-size: 14px;
+      }
+
+      .cover {
+        min-height: 1120px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        background:
+          radial-gradient(circle at top right, rgba(218, 232, 239, 0.85), transparent 28%),
+          radial-gradient(circle at bottom left, rgba(245, 221, 208, 0.85), transparent 30%),
+          linear-gradient(180deg, #fffdf9, #f6efe5);
+      }
+
+      .cover-block {
+        max-width: 700px;
+      }
+
+      .eyebrow {
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      .hero-title {
+        margin: 18px 0;
+      }
+
+      .meta-grid,
+      .summary-grid,
+      .cost-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .meta-card,
+      .summary-card {
+        padding: 14px 16px;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+      }
+
+      .meta-card:nth-child(1),
+      .summary-card:nth-child(1) {
+        background: var(--sage);
+      }
+
+      .meta-card:nth-child(2),
+      .summary-card:nth-child(2) {
+        background: var(--sky);
+      }
+
+      .meta-card:nth-child(3),
+      .summary-card:nth-child(3) {
+        background: var(--peach);
+      }
+
+      .meta-card:nth-child(4),
+      .summary-card:nth-child(4) {
+        background: var(--sand);
+      }
+
+      .section-label {
+        margin-top: 26px;
+        padding: 8px 12px;
+        border-left: 4px solid #9ea88e;
+        background: #faf5ec;
+        font-weight: 700;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 12px 0 18px;
+      }
+
+      th,
+      td {
+        padding: 10px 12px;
+        border: 1px solid var(--line);
+        vertical-align: top;
+        font-size: 13px;
+      }
+
+      th {
+        background: #f4ede4;
+        text-align: left;
+      }
+
+      .diagram {
+        margin: 14px 0 22px;
+        padding: 14px;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: #fffaf3;
+      }
+
+      .diagram svg {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+      }
+
+      .callout {
+        padding: 14px 16px;
+        border-radius: 16px;
+        background: #faf5ec;
+        border: 1px solid var(--line);
+      }
+
+      .gantt {
+        display: grid;
+        grid-template-columns: 240px repeat(8, 1fr);
+        border: 1px solid var(--line);
+        border-bottom: 0;
+        margin-top: 12px;
+      }
+
+      .gantt > div {
+        padding: 10px 8px;
+        border-bottom: 1px solid var(--line);
+        border-right: 1px solid var(--line);
+        min-height: 44px;
+        font-size: 12px;
+      }
+
+      .gantt .head {
+        background: #f4ede4;
+        font-weight: 700;
+      }
+
+      .bar-sage,
+      .bar-sky,
+      .bar-peach {
+        border-radius: 999px;
+      }
+
+      .bar-sage {
+        background: var(--sage);
+      }
+
+      .bar-sky {
+        background: var(--sky);
+      }
+
+      .bar-peach {
+        background: var(--peach);
+      }
+
+      @media print {
+        body {
+          background: white;
+        }
+
+        .report {
+          width: auto;
+          margin: 0;
+          box-shadow: none;
+          border: 0;
+        }
+
+        .page {
+          border-bottom: 0;
+          min-height: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="report">
+      <section class="page cover">
+        <div class="cover-block">
+          <p class="eyebrow">Software Project Management Report</p>
+          <h1 class="hero-title">Inventory Management System</h1>
+          <p>
+            A full-stack MERN project designed for inventory visibility, stock control,
+            movement tracking, and low-stock awareness through a soft-tone responsive web
+            interface.
+          </p>
+        </div>
+
+        <div class="meta-grid">
+          <div class="meta-card">
+            <strong>Project Type</strong>
+            <p>Full-stack MERN web application</p>
+          </div>
+          <div class="meta-card">
+            <strong>Technology Stack</strong>
+            <p>MongoDB, Express, React, Node.js, Vite, JWT</p>
+          </div>
+          <div class="meta-card">
+            <strong>Prepared For</strong>
+            <p>Inventory Management System academic project documentation</p>
+          </div>
+          <div class="meta-card">
+            <strong>Date</strong>
+            <p>08 April 2026</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="page page-break">
+        <p class="eyebrow">Experiment-01</p>
+        <h2>Aim</h2>
+        <p>
+          To study, analyze, design, and document the requirements of an Inventory
+          Management System by preparing a detailed problem statement, Software
+          Requirements Specification (SRS), and UML diagrams for a MERN-based solution.
+        </p>
+
+        <h2>Theory</h2>
+        <p>
+          A Software Requirements Specification is the formal foundation of a software
+          project. It defines what the system must do, who will use it, the environment
+          in which it will operate, the quality standards it must maintain, and the
+          assumptions under which development will proceed. A clear SRS reduces ambiguity,
+          prevents scope drift, and gives developers, testers, and stakeholders a shared
+          understanding of expected behavior.
+        </p>
+        <p>
+          For an inventory management system, the SRS is especially important because stock
+          accuracy, movement history, supplier tracking, and replenishment awareness all
+          depend on consistent workflows and reliable data handling.
+        </p>
+
+        <h2>Problem Statement</h2>
+        <p>
+          Traditional inventory processes often rely on spreadsheets or manual registers.
+          This leads to duplicate entries, delayed updates, missed reorder cycles, and
+          poor visibility into stock movement. Teams struggle to answer basic operational
+          questions such as what is available, what is running low, what has moved today,
+          and what the current inventory value is.
+        </p>
+        <p>
+          The proposed Inventory Management System addresses these issues by providing a
+          centralized digital platform where authorized users can log in, manage products,
+          organize items by category, record stock-in and stock-out transactions, monitor
+          low-stock alerts, and review recent movement activity in real time.
+        </p>
+
+        <div class="section-label">Software Requirements Specification</div>
+        <h3>1. Introduction</h3>
+        <p><strong>1.1 Purpose:</strong> To describe the functional and non-functional requirements of the Inventory Management System.</p>
+        <p><strong>1.2 Scope:</strong> The system is a web application for maintaining product records, stock counts, supplier details, locations, and movement logs.</p>
+        <p><strong>1.3 Definitions:</strong> SRS - Software Requirements Specification, UI - User Interface, API - Application Programming Interface, JWT - JSON Web Token, CRUD - Create Read Update Delete.</p>
+        <p><strong>1.4 Overview:</strong> This document covers system description, features, constraints, interfaces, planning artifacts, metrics, and cost estimation.</p>
+
+        <h3>2. Overall Description</h3>
+        <p><strong>2.1 Product Perspective:</strong> The application follows a client-server architecture where the React frontend communicates with an Express API, which in turn persists data in MongoDB.</p>
+        <p><strong>2.2 Product Functions:</strong> User authentication, category management, product creation, stock editing, movement logging, dashboard insights, and low-stock monitoring.</p>
+        <p><strong>2.3 User Classes:</strong> Admin users manage products and operational settings; staff users update stock entries and observe inventory status.</p>
+        <p><strong>2.4 Operating Environment:</strong> Web browsers on Windows, Linux, and macOS; Node.js server runtime; MongoDB database server.</p>
+        <p><strong>2.5 Constraints:</strong> Stable network access is required, JWT secrets must be protected, and MongoDB must be reachable for persistent storage.</p>
+        <p><strong>2.6 Assumptions:</strong> Users enter accurate stock data, supplier information is known, and the organization follows defined stock workflows.</p>
+
+        <h3>3. Functional Requirements</h3>
+        <ul>
+          <li>The system shall allow users to register and log in securely.</li>
+          <li>The system shall allow authorized users to create and update product records.</li>
+          <li>The system shall organize products by category, supplier, and storage location.</li>
+          <li>The system shall record stock-in, stock-out, and adjustment movements.</li>
+          <li>The system shall recalculate product stock status after each movement.</li>
+          <li>The system shall display low-stock and out-of-stock conditions on the dashboard.</li>
+          <li>The system shall show inventory value based on quantity and unit cost.</li>
+          <li>The system shall provide recent movement history for traceability.</li>
+        </ul>
+
+        <h3>4. Non-Functional Requirements</h3>
+        <ul>
+          <li>Performance: dashboard and list views should respond quickly for normal warehouse usage.</li>
+          <li>Security: authentication must use password hashing and token-based authorization.</li>
+          <li>Usability: the UI should be responsive, soft-toned, and easy to navigate.</li>
+          <li>Maintainability: frontend and backend modules should be separated cleanly.</li>
+          <li>Scalability: the data model should support expansion to more products and categories.</li>
+        </ul>
+
+        <h3>5. External Interface Requirements</h3>
+        <ul>
+          <li>User Interface: responsive React screens for login, dashboard, and inventory operations.</li>
+          <li>Software Interface: REST API endpoints built in Express.</li>
+          <li>Database Interface: MongoDB collections for users, categories, products, and stock movements.</li>
+          <li>Communication Interface: HTTP/JSON between client and server.</li>
+        </ul>
+      </section>
+
+      <section class="page page-break">
+        <p class="eyebrow">Experiment-01</p>
+        <h2>Diagrams</h2>
+
+        <h3>Use Case Diagram</h3>
+        <div class="diagram">
+          <svg viewBox="0 0 860 320" xmlns="http://www.w3.org/2000/svg">
+            <rect x="250" y="24" width="390" height="270" rx="22" fill="#fff" stroke="#cfc6ba"/>
+            <text x="445" y="48" text-anchor="middle" font-size="18" font-family="Georgia">Inventory Management System</text>
+            <circle cx="90" cy="95" r="18" fill="#d8e4d5" stroke="#a9b5a4"/>
+            <line x1="90" y1="113" x2="90" y2="165" stroke="#70675f"/>
+            <line x1="65" y1="130" x2="115" y2="130" stroke="#70675f"/>
+            <line x1="90" y1="165" x2="65" y2="195" stroke="#70675f"/>
+            <line x1="90" y1="165" x2="115" y2="195" stroke="#70675f"/>
+            <text x="90" y="220" text-anchor="middle" font-size="15">Admin</text>
+            <circle cx="760" cy="95" r="18" fill="#dae8ef" stroke="#9ab0bc"/>
+            <line x1="760" y1="113" x2="760" y2="165" stroke="#70675f"/>
+            <line x1="735" y1="130" x2="785" y2="130" stroke="#70675f"/>
+            <line x1="760" y1="165" x2="735" y2="195" stroke="#70675f"/>
+            <line x1="760" y1="165" x2="785" y2="195" stroke="#70675f"/>
+            <text x="760" y="220" text-anchor="middle" font-size="15">Staff</text>
+            <ellipse cx="445" cy="92" rx="96" ry="26" fill="#f5ddd0" stroke="#c79f87"/>
+            <text x="445" y="98" text-anchor="middle" font-size="14">Authenticate User</text>
+            <ellipse cx="445" cy="145" rx="106" ry="26" fill="#d8e4d5" stroke="#9fae9b"/>
+            <text x="445" y="151" text-anchor="middle" font-size="14">Manage Products</text>
+            <ellipse cx="445" cy="198" rx="118" ry="26" fill="#dae8ef" stroke="#98afba"/>
+            <text x="445" y="204" text-anchor="middle" font-size="14">Record Stock Movement</text>
+            <ellipse cx="445" cy="251" rx="100" ry="26" fill="#ece0cf" stroke="#b7aa96"/>
+            <text x="445" y="257" text-anchor="middle" font-size="14">View Dashboard</text>
+            <line x1="108" y1="95" x2="349" y2="92" stroke="#7f7569"/>
+            <line x1="108" y1="130" x2="339" y2="145" stroke="#7f7569"/>
+            <line x1="108" y1="165" x2="327" y2="198" stroke="#7f7569"/>
+            <line x1="742" y1="95" x2="541" y2="92" stroke="#7f7569"/>
+            <line x1="742" y1="130" x2="551" y2="198" stroke="#7f7569"/>
+            <line x1="742" y1="165" x2="545" y2="251" stroke="#7f7569"/>
+          </svg>
+        </div>
+
+        <h3>Class Diagram</h3>
+        <div class="diagram">
+          <svg viewBox="0 0 860 360" xmlns="http://www.w3.org/2000/svg">
+            <rect x="32" y="40" width="180" height="160" rx="12" fill="#fff" stroke="#cfc6ba"/>
+            <text x="122" y="66" text-anchor="middle" font-size="18">User</text>
+            <line x1="32" y1="78" x2="212" y2="78" stroke="#cfc6ba"/>
+            <text x="46" y="102" font-size="13">name</text>
+            <text x="46" y="123" font-size="13">email</text>
+            <text x="46" y="144" font-size="13">password</text>
+            <text x="46" y="165" font-size="13">role</text>
+            <rect x="252" y="40" width="180" height="160" rx="12" fill="#fff" stroke="#cfc6ba"/>
+            <text x="342" y="66" text-anchor="middle" font-size="18">Category</text>
+            <line x1="252" y1="78" x2="432" y2="78" stroke="#cfc6ba"/>
+            <text x="266" y="102" font-size="13">name</text>
+            <text x="266" y="123" font-size="13">slug</text>
+            <text x="266" y="144" font-size="13">accentColor</text>
+            <rect x="472" y="40" width="180" height="220" rx="12" fill="#fff" stroke="#cfc6ba"/>
+            <text x="562" y="66" text-anchor="middle" font-size="18">Product</text>
+            <line x1="472" y1="78" x2="652" y2="78" stroke="#cfc6ba"/>
+            <text x="486" y="102" font-size="13">name, sku</text>
+            <text x="486" y="123" font-size="13">supplier, location</text>
+            <text x="486" y="144" font-size="13">quantity, reorderLevel</text>
+            <text x="486" y="165" font-size="13">unitCost, unitPrice</text>
+            <text x="486" y="186" font-size="13">status</text>
+            <text x="486" y="207" font-size="13">lastMovementAt</text>
+            <rect x="692" y="40" width="136" height="220" rx="12" fill="#fff" stroke="#cfc6ba"/>
+            <text x="760" y="66" text-anchor="middle" font-size="18">StockMovement</text>
+            <line x1="692" y1="78" x2="828" y2="78" stroke="#cfc6ba"/>
+            <text x="706" y="102" font-size="13">type</text>
+            <text x="706" y="123" font-size="13">quantity</text>
+            <text x="706" y="144" font-size="13">note</text>
+            <text x="706" y="165" font-size="13">reference</text>
+            <text x="706" y="186" font-size="13">previousQuantity</text>
+            <text x="706" y="207" font-size="13">newQuantity</text>
+            <line x1="212" y1="120" x2="252" y2="120" stroke="#8f857a" stroke-width="2"/>
+            <line x1="432" y1="120" x2="472" y2="120" stroke="#8f857a" stroke-width="2"/>
+            <line x1="652" y1="150" x2="692" y2="150" stroke="#8f857a" stroke-width="2"/>
+          </svg>
+        </div>
+
+        <h3>Activity Diagram</h3>
+        <div class="diagram">
+          <svg viewBox="0 0 860 240" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="86" cy="120" rx="42" ry="24" fill="#d8e4d5" stroke="#a4b09d"/>
+            <text x="86" y="126" text-anchor="middle" font-size="14">Start</text>
+            <rect x="160" y="92" width="120" height="56" rx="12" fill="#fff" stroke="#cfc6ba"/>
+            <text x="220" y="125" text-anchor="middle" font-size="14">Login</text>
+            <rect x="328" y="92" width="150" height="56" rx="12" fill="#fff" stroke="#cfc6ba"/>
+            <text x="403" y="125" text-anchor="middle" font-size="14">Select Product</text>
+            <rect x="520" y="92" width="160" height="56" rx="12" fill="#fff" stroke="#cfc6ba"/>
+            <text x="600" y="125" text-anchor="middle" font-size="14">Record Movement</text>
+            <rect x="716" y="92" width="108" height="56" rx="12" fill="#fff" stroke="#cfc6ba"/>
+            <text x="770" y="125" text-anchor="middle" font-size="14">Update Stock</text>
+            <line x1="128" y1="120" x2="160" y2="120" stroke="#80766b" stroke-width="2"/>
+            <line x1="280" y1="120" x2="328" y2="120" stroke="#80766b" stroke-width="2"/>
+            <line x1="478" y1="120" x2="520" y2="120" stroke="#80766b" stroke-width="2"/>
+            <line x1="680" y1="120" x2="716" y2="120" stroke="#80766b" stroke-width="2"/>
+          </svg>
+        </div>
+      </section>
+ 
+      <section class="page page-break">
+        <p class="eyebrow">Experiment-01</p>
+        <h2>Additional Architecture Diagrams</h2>
+
+        <h3>Sequence Diagram</h3>
+        <div class="diagram">
+          <svg viewBox="0 0 860 300" xmlns="http://www.w3.org/2000/svg">
+            <text x="110" y="34" text-anchor="middle" font-size="16">User</text>
+            <text x="320" y="34" text-anchor="middle" font-size="16">React UI</text>
+            <text x="540" y="34" text-anchor="middle" font-size="16">Express API</text>
+            <text x="750" y="34" text-anchor="middle" font-size="16">MongoDB</text>
+            <line x1="110" y1="50" x2="110" y2="270" stroke="#9a9187" stroke-dasharray="6 6"/>
+            <line x1="320" y1="50" x2="320" y2="270" stroke="#9a9187" stroke-dasharray="6 6"/>
+            <line x1="540" y1="50" x2="540" y2="270" stroke="#9a9187" stroke-dasharray="6 6"/>
+            <line x1="750" y1="50" x2="750" y2="270" stroke="#9a9187" stroke-dasharray="6 6"/>
+            <line x1="120" y1="82" x2="310" y2="82" stroke="#7c7368" stroke-width="2"/>
+            <text x="214" y="72" text-anchor="middle" font-size="13">submit login</text>
+            <line x1="330" y1="116" x2="530" y2="116" stroke="#7c7368" stroke-width="2"/>
+            <text x="430" y="106" text-anchor="middle" font-size="13">POST /auth/login</text>
+            <line x1="550" y1="150" x2="740" y2="150" stroke="#7c7368" stroke-width="2"/>
+            <text x="646" y="140" text-anchor="middle" font-size="13">verify user</text>
+            <line x1="740" y1="184" x2="550" y2="184" stroke="#7c7368" stroke-width="2"/>
+            <text x="646" y="174" text-anchor="middle" font-size="13">user document</text>
+            <line x1="530" y1="218" x2="330" y2="218" stroke="#7c7368" stroke-width="2"/>
+            <text x="430" y="208" text-anchor="middle" font-size="13">JWT + profile</text>
+            <line x1="310" y1="252" x2="120" y2="252" stroke="#7c7368" stroke-width="2"/>
+            <text x="214" y="242" text-anchor="middle" font-size="13">dashboard access</text>
+          </svg>
+        </div>
+
+        <h3>Component Diagram</h3>
+        <div class="diagram">
+          <svg viewBox="0 0 860 220" xmlns="http://www.w3.org/2000/svg">
+            <rect x="28" y="50" width="180" height="90" rx="16" fill="#dae8ef" stroke="#98afba"/>
+            <text x="118" y="92" text-anchor="middle" font-size="18">React Frontend</text>
+            <text x="118" y="116" text-anchor="middle" font-size="13">Login, Dashboard, Inventory</text>
+            <rect x="338" y="50" width="180" height="90" rx="16" fill="#d8e4d5" stroke="#9fae9b"/>
+            <text x="428" y="92" text-anchor="middle" font-size="18">Express Backend</text>
+            <text x="428" y="116" text-anchor="middle" font-size="13">Auth, Product, Movement APIs</text>
+            <rect x="648" y="50" width="180" height="90" rx="16" fill="#f5ddd0" stroke="#c79f87"/>
+            <text x="738" y="92" text-anchor="middle" font-size="18">MongoDB</text>
+            <text x="738" y="116" text-anchor="middle" font-size="13">Users, Categories, Products</text>
+            <line x1="208" y1="95" x2="338" y2="95" stroke="#7c7368" stroke-width="3"/>
+            <line x1="518" y1="95" x2="648" y2="95" stroke="#7c7368" stroke-width="3"/>
+          </svg>
+        </div>
+
+        <h3>Deployment Diagram</h3>
+        <div class="diagram">
+          <svg viewBox="0 0 860 220" xmlns="http://www.w3.org/2000/svg">
+            <rect x="34" y="48" width="190" height="120" rx="16" fill="#ece0cf" stroke="#b7aa96"/>
+            <text x="129" y="92" text-anchor="middle" font-size="18">Client Device</text>
+            <text x="129" y="118" text-anchor="middle" font-size="13">Browser</text>
+            <rect x="334" y="48" width="190" height="120" rx="16" fill="#d8e4d5" stroke="#9fae9b"/>
+            <text x="429" y="92" text-anchor="middle" font-size="18">Application Server</text>
+            <text x="429" y="118" text-anchor="middle" font-size="13">Node.js + Express API</text>
+            <rect x="636" y="48" width="190" height="120" rx="16" fill="#dae8ef" stroke="#98afba"/>
+            <text x="731" y="92" text-anchor="middle" font-size="18">Database Server</text>
+            <text x="731" y="118" text-anchor="middle" font-size="13">MongoDB instance</text>
+            <line x1="224" y1="108" x2="334" y2="108" stroke="#7c7368" stroke-width="3"/>
+            <line x1="524" y1="108" x2="636" y2="108" stroke="#7c7368" stroke-width="3"/>
+          </svg>
+        </div>
+      </section>
+
+      <section class="page page-break">
+        <p class="eyebrow">Experiment-02</p>
+        <h2>Work Breakdown Structure</h2>
+        <p>
+          The WBS decomposes the project into manageable tasks so planning, ownership, and
+          progress tracking remain clear.
+        </p>
+        <table>
+          <thead>
+            <tr>
+              <th>WBS ID</th>
+              <th>Task</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>1.0</td><td>Requirement Analysis</td><td>Define problem statement, objectives, and user needs.</td></tr>
+            <tr><td>2.0</td><td>System Design</td><td>Prepare data model, API design, and UI wireflow.</td></tr>
+            <tr><td>3.0</td><td>Backend Development</td><td>Create models, routes, middleware, and authentication.</td></tr>
+            <tr><td>4.0</td><td>Frontend Development</td><td>Build React screens, forms, dashboard, and navigation.</td></tr>
+            <tr><td>5.0</td><td>Database Integration</td><td>Connect MongoDB and validate CRUD and stock movement flows.</td></tr>
+            <tr><td>6.0</td><td>Testing</td><td>Check usability, stock calculations, and route correctness.</td></tr>
+            <tr><td>7.0</td><td>Deployment Preparation</td><td>Configure environment variables, scripts, and documentation.</td></tr>
+          </tbody>
+        </table>
+
+        <p class="eyebrow">Experiment-03</p>
+        <h2>Gantt Chart</h2>
+        <div class="gantt">
+          <div class="head">Task</div><div class="head">W1</div><div class="head">W2</div><div class="head">W3</div><div class="head">W4</div><div class="head">W5</div><div class="head">W6</div><div class="head">W7</div><div class="head">W8</div>
+          <div>Requirement gathering</div><div class="bar-sage"></div><div class="bar-sage"></div><div></div><div></div><div></div><div></div><div></div><div></div>
+          <div>Architecture and schema design</div><div></div><div class="bar-sky"></div><div class="bar-sky"></div><div></div><div></div><div></div><div></div><div></div>
+          <div>Backend development</div><div></div><div></div><div class="bar-peach"></div><div class="bar-peach"></div><div class="bar-peach"></div><div></div><div></div><div></div>
+          <div>Frontend development</div><div></div><div></div><div></div><div class="bar-sage"></div><div class="bar-sage"></div><div class="bar-sage"></div><div></div><div></div>
+          <div>Integration and fixes</div><div></div><div></div><div></div><div></div><div class="bar-sky"></div><div class="bar-sky"></div><div></div><div></div>
+          <div>Testing and documentation</div><div></div><div></div><div></div><div></div><div></div><div class="bar-peach"></div><div class="bar-peach"></div><div class="bar-peach"></div>
+        </div>
+      </section>
+
+      <section class="page page-break">
+        <p class="eyebrow">Experiment-04</p>
+        <h2>Software Metrics</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>Estimated Value</th>
+              <th>Interpretation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Estimated LOC</td><td>4,500</td><td>Combined frontend, backend, and documentation code assets.</td></tr>
+            <tr><td>Function Points</td><td>52</td><td>Based on login, product CRUD, movement logging, dashboard summaries, and reports.</td></tr>
+            <tr><td>Average Response Time</td><td>Below 2 seconds</td><td>Target for regular dashboard and inventory interactions.</td></tr>
+            <tr><td>Productivity</td><td>28 LOC per person-day</td><td>Reflects modular development pace for a small academic team.</td></tr>
+            <tr><td>Defect Density Target</td><td>Below 0.8 defects/KLOC</td><td>Indicates focus on correctness in stock calculations and auth flows.</td></tr>
+          </tbody>
+        </table>
+
+        <div class="two-col">
+          <div class="callout">
+            <h3>Metric Formula Examples</h3>
+            <p><strong>Productivity</strong> = Total LOC / Effort in person-days</p>
+            <p><strong>Defect Density</strong> = Number of defects / KLOC</p>
+            <p><strong>Inventory Value</strong> = Sum of quantity x unit cost</p>
+          </div>
+          <div class="callout">
+            <h3>Quality Focus</h3>
+            <p>
+              Inventory systems are highly sensitive to quantity mismatches. Therefore, the
+              most important metrics are stock accuracy, API correctness, and dashboard
+              consistency after every movement event.
+            </p>
+          </div>
+        </div>
+
+        <p class="eyebrow">Experiment-05</p>
+        <h2>Project Cost Estimation</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Cost Head</th>
+              <th>Estimated Cost (INR)</th>
+              <th>Remarks</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Requirement and design</td><td>18,000</td><td>Analysis, SRS, diagrams, and architecture planning.</td></tr>
+            <tr><td>Backend development</td><td>42,000</td><td>Authentication, API routes, models, business logic.</td></tr>
+            <tr><td>Frontend development</td><td>38,000</td><td>Responsive UI, forms, tables, and dashboard layout.</td></tr>
+            <tr><td>Testing and QA</td><td>14,000</td><td>Flow checks, data validation, and UI verification.</td></tr>
+            <tr><td>Documentation</td><td>10,000</td><td>SPM report, project notes, and deployment guidance.</td></tr>
+            <tr><th>Total Estimated Cost</th><th>122,000</th><th>Moderate-cost academic or prototype implementation.</th></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="page page-break">
+        <p class="eyebrow">Experiment-06</p>
+        <h2>Resource Allocation</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Resource Type</th>
+              <th>Allocated Items</th>
+              <th>Purpose</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Human Resources</td><td>Project manager, MERN developer, UI designer, tester</td><td>Execution, review, quality assurance, and coordination.</td></tr>
+            <tr><td>Hardware Resources</td><td>Laptop/desktop, internet connection</td><td>Development, local testing, and report preparation.</td></tr>
+            <tr><td>Software Resources</td><td>Node.js, MongoDB, VS Code, browser, Git</td><td>Programming, storage, testing, and collaboration.</td></tr>
+            <tr><td>Time Resources</td><td>8-week academic schedule</td><td>Requirement analysis through final documentation.</td></tr>
+          </tbody>
+        </table>
+
+        <p class="eyebrow">Experiment-07</p>
+        <h2>Team Structure and Roles</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Role</th>
+              <th>Responsibilities</th>
+              <th>Main Deliverables</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Project Manager</td><td>Planning, milestone review, coordination</td><td>Timeline, WBS, overall delivery control</td></tr>
+            <tr><td>Backend Developer</td><td>API, models, auth, stock logic</td><td>Express server and MongoDB integration</td></tr>
+            <tr><td>Frontend Developer</td><td>UI design, forms, dashboard, responsiveness</td><td>React interface and soft-tone user experience</td></tr>
+            <tr><td>Tester</td><td>Flow testing, validation, regression checks</td><td>Bug reports and quality review notes</td></tr>
+          </tbody>
+        </table>
+
+        <div class="summary-grid">
+          <div class="summary-card">
+            <strong>Project Outcome</strong>
+            <p>A modern inventory platform that improves visibility and reduces manual stock errors.</p>
+          </div>
+          <div class="summary-card">
+            <strong>Business Benefit</strong>
+            <p>Faster stock updates, better replenishment awareness, and cleaner warehouse operations.</p>
+          </div>
+          <div class="summary-card">
+            <strong>Technical Benefit</strong>
+            <p>Separation of concerns between frontend, backend, and persistence layers.</p>
+          </div>
+          <div class="summary-card">
+            <strong>Future Scope</strong>
+            <p>Barcode support, supplier purchase orders, analytics exports, and deployment automation.</p>
+          </div>
+        </div>
+
+        <h2>Conclusion</h2>
+        <p>
+          The Inventory Management System demonstrates how a MERN-based application can be
+          planned, implemented, and documented using standard software project management
+          practices. The project replaces fragile manual workflows with a structured,
+          secure, and user-friendly platform for product management and stock visibility.
+        </p>
+        <p>
+          Through SRS preparation, UML diagrams, WBS, Gantt planning, metrics, cost
+          estimation, and team structuring, the project provides both a practical software
+          solution and a complete academic documentation package.
+        </p>
+      </section>
+    </main>
+  </body>
+</html>

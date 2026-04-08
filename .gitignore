@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.DS_Store
+backend/.env
+frontend/.env
+coverage/
+*.log
+*.err
+.edge-preview/
+preview-server.*
+backend-live.*
+frontend-live.*
