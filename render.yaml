@@ -2,6 +2,7 @@ services:
   - type: web
     name: inventory-management-system
     runtime: node
+    region: singapore
     plan: free
     rootDir: .
     buildCommand: npm install && npm run build
@@ -19,4 +20,3 @@ services:
         generateValue: true
       - key: MONGO_URI
         sync: false
-
