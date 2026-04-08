@@ -1,54 +1,66 @@
-import { defaultCategories, sampleProducts } from "./defaultData.js";
+import { defaultCategories, sampleMovements, sampleProducts } from "./defaultData.js";
 import Category from "../models/Category.js";
 import Product from "../models/Product.js";
 import StockMovement from "../models/StockMovement.js";
 import User from "../models/User.js";
 import { deriveStockStatus, slugify } from "../utils/inventory.js";
 
-const ensureUsers = async () => {
-  const userCount = await User.countDocuments();
-  if (userCount > 0) {
-    return;
-  }
+const seedUsers = [
+  {
+    name: "Admin User",
+    email: "admin@softstock.com",
+    password: "Admin@123",
+    role: "admin",
+  },
+  {
+    name: "Warehouse Staff",
+    email: "staff@softstock.com",
+    password: "Staff@123",
+    role: "staff",
+  },
+];
 
-  await User.create([
-    {
-      name: "Admin User",
-      email: "admin@softstock.com",
-      password: "Admin@123",
-      role: "admin",
-    },
-    {
-      name: "Warehouse Staff",
-      email: "staff@softstock.com",
-      password: "Staff@123",
-      role: "staff",
-    },
-  ]);
+const ensureUsers = async () => {
+  await Promise.all(
+    seedUsers.map(async (seedUser) => {
+      const existing = await User.findOne({ email: seedUser.email });
+      if (!existing) {
+        await User.create(seedUser);
+      }
+    })
+  );
 };
 
 const ensureCategories = async () => {
-  const categories = await Category.find();
-  if (categories.length > 0) {
-    return categories;
+  const ensuredCategories = [];
+
+  for (const category of defaultCategories) {
+    const slug = slugify(category.name);
+    const ensured = await Category.findOneAndUpdate(
+      { slug },
+      {
+        $set: {
+          accentColor: category.accentColor,
+        },
+        $setOnInsert: {
+          name: category.name,
+          slug,
+        },
+      },
+      {
+        new: true,
+        upsert: true,
+      }
+    );
+    ensuredCategories.push(ensured);
   }
 
-  return Category.insertMany(
-    defaultCategories.map((category) => ({
-      ...category,
-      slug: slugify(category.name),
-    }))
-  );
+  return ensuredCategories;
 };
 
 export const bootstrapDemoData = async () => {
   await ensureUsers();
   const categories = await ensureCategories();
-
-  const productCount = await Product.countDocuments();
-  if (productCount > 0) {
-    return;
-  }
 
   const admin = await User.findOne({ role: "admin" });
   const staff = await User.findOne({ role: "staff" });
@@ -57,8 +69,13 @@ export const bootstrapDemoData = async () => {
     return accumulator;
   }, {});
 
-  const products = await Product.insertMany(
-    sampleProducts.map((product) => ({
+  const sampleSkus = sampleProducts.map((product) => product.sku);
+  const existingProducts = await Product.find({ sku: { $in: sampleSkus } });
+  const existingSkuSet = new Set(existingProducts.map((product) => product.sku));
+
+  const productsToInsert = sampleProducts
+    .filter((product) => !existingSkuSet.has(product.sku))
+    .map((product) => ({
       name: product.name,
       sku: product.sku,
       description: product.description,
@@ -71,53 +88,56 @@ export const bootstrapDemoData = async () => {
       unitPrice: product.unitPrice,
       status: deriveStockStatus(product.quantity, product.reorderLevel),
       lastUpdatedBy: admin?._id,
-    }))
+      createdAt: product.createdAt,
+      updatedAt: product.updatedAt,
+    }));
+
+  const insertedProducts = productsToInsert.length
+    ? await Product.insertMany(productsToInsert)
+    : [];
+  const productLookup = [...existingProducts, ...insertedProducts].reduce(
+    (accumulator, product) => {
+      accumulator[product.sku] = product;
+      return accumulator;
+    },
+    {}
   );
 
-  await StockMovement.insertMany([
-    {
-      product: products[0]._id,
-      type: "stock_in",
-      quantity: 22,
-      note: "Opening stock",
-      reference: "BOOT-001",
-      previousQuantity: 0,
-      newQuantity: 22,
-      performedBy: admin._id,
-      unitCost: products[0].unitCost,
-    },
-    {
-      product: products[1]._id,
-      type: "stock_in",
-      quantity: 8,
-      note: "Opening stock",
-      reference: "BOOT-002",
-      previousQuantity: 0,
-      newQuantity: 8,
-      performedBy: admin._id,
-      unitCost: products[1].unitCost,
-    },
-    {
-      product: products[2]._id,
-      type: "stock_in",
-      quantity: 46,
-      note: "Opening stock",
-      reference: "BOOT-003",
-      previousQuantity: 0,
-      newQuantity: 46,
-      performedBy: admin._id,
-      unitCost: products[2].unitCost,
-    },
-    {
-      product: products[4]._id,
-      type: "stock_out",
-      quantity: 5,
-      note: "Initial issue to store floor",
-      reference: "BOOT-004",
-      previousQuantity: 5,
-      newQuantity: 0,
-      performedBy: staff._id,
-      unitCost: products[4].unitCost,
-    },
-  ]);
+  const existingRefs = new Set(
+    (
+      await StockMovement.find({
+        reference: { $in: sampleMovements.map((movement) => movement.reference) },
+      })
+    ).map((movement) => movement.reference)
+  );
+
+  const movementsToInsert = sampleMovements
+    .filter((movement) => !existingRefs.has(movement.reference))
+    .map((movement) => {
+      const product = productLookup[movement.sku];
+      const performedBy = movement.performedByRole === "staff" ? staff : admin;
+
+      if (!product || !performedBy) {
+        return null;
+      }
+
+      return {
+        product: product._id,
+        type: movement.type,
+        quantity: movement.quantity,
+        note: movement.note,
+        reference: movement.reference,
+        previousQuantity: movement.previousQuantity,
+        newQuantity: movement.newQuantity,
+        performedBy: performedBy._id,
+        unitCost: product.unitCost,
+        createdAt: movement.createdAt,
+        updatedAt: movement.createdAt,
+      };
+    })
+    .filter(Boolean);
+
+  if (movementsToInsert.length) {
+    await StockMovement.insertMany(movementsToInsert);
+  }
 };

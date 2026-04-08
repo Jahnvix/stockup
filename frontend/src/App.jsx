@@ -5,11 +5,11 @@ import {
   Routes,
   useLocation,
 } from "react-router-dom";
-import Layout from "./components/Layout.jsx";
+import BoutiqueLayout from "./components/BoutiqueLayout.jsx";
 import { AuthProvider, useAuth } from "./context/AuthContext.jsx";
-import DashboardPage from "./pages/DashboardPage.jsx";
-import InventoryPage from "./pages/InventoryPage.jsx";
-import LoginPage from "./pages/LoginPage.jsx";
+import AuthLandingPage from "./pages/AuthLandingPage.jsx";
+import CatalogStudioPage from "./pages/CatalogStudioPage.jsx";
+import RetailDashboardPage from "./pages/RetailDashboardPage.jsx";
 
 const ProtectedApp = () => {
   const { user, loading } = useAuth();
@@ -33,7 +33,7 @@ const ProtectedApp = () => {
     return <Navigate to="/inventory?previewMock=1" replace />;
   }
 
-  return <Layout />;
+  return <BoutiqueLayout />;
 };
 
 const PublicOnlyRoute = () => {
@@ -52,15 +52,15 @@ const PublicOnlyRoute = () => {
     return <Navigate to="/" replace />;
   }
 
-  return <LoginPage />;
+  return <AuthLandingPage />;
 };
 
 const AppRoutes = () => (
   <Routes>
     <Route path="/auth" element={<PublicOnlyRoute />} />
     <Route path="/" element={<ProtectedApp />}>
-      <Route index element={<DashboardPage />} />
-      <Route path="inventory" element={<InventoryPage />} />
+      <Route index element={<RetailDashboardPage />} />
+      <Route path="inventory" element={<CatalogStudioPage />} />
     </Route>
   </Routes>
 );

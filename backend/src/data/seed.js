@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import connectDB from "../config/db.js";
-import { defaultCategories, sampleProducts } from "./defaultData.js";
+import { defaultCategories, sampleMovements, sampleProducts } from "./defaultData.js";
 import Category from "../models/Category.js";
 import Product from "../models/Product.js";
 import StockMovement from "../models/StockMovement.js";
@@ -60,44 +60,31 @@ const seedDatabase = async () => {
       unitPrice: product.unitPrice,
       status: deriveStockStatus(product.quantity, product.reorderLevel),
       lastUpdatedBy: admin._id,
+      createdAt: product.createdAt,
+      updatedAt: product.updatedAt,
     }))
   );
 
-  await StockMovement.insertMany([
-    {
-      product: products[0]._id,
-      type: "stock_in",
-      quantity: 22,
-      note: "Opening inventory",
-      reference: "SEED-001",
-      previousQuantity: 0,
-      newQuantity: 22,
-      performedBy: admin._id,
-      unitCost: products[0].unitCost,
-    },
-    {
-      product: products[1]._id,
-      type: "stock_in",
-      quantity: 8,
-      note: "Opening inventory",
-      reference: "SEED-002",
-      previousQuantity: 0,
-      newQuantity: 8,
-      performedBy: admin._id,
-      unitCost: products[1].unitCost,
-    },
-    {
-      product: products[4]._id,
-      type: "stock_out",
-      quantity: 3,
-      note: "Store launch consumption",
-      reference: "SEED-003",
-      previousQuantity: 3,
-      newQuantity: 0,
-      performedBy: staff._id,
-      unitCost: products[4].unitCost,
-    },
-  ]);
+  const productLookup = products.reduce((accumulator, product) => {
+    accumulator[product.sku] = product;
+    return accumulator;
+  }, {});
+
+  await StockMovement.insertMany(
+    sampleMovements.map((movement) => ({
+      product: productLookup[movement.sku]._id,
+      type: movement.type,
+      quantity: movement.quantity,
+      note: movement.note,
+      reference: movement.reference,
+      previousQuantity: movement.previousQuantity,
+      newQuantity: movement.newQuantity,
+      performedBy: movement.performedByRole === "staff" ? staff._id : admin._id,
+      unitCost: productLookup[movement.sku].unitCost,
+      createdAt: movement.createdAt,
+      updatedAt: movement.createdAt,
+    }))
+  );
 
   console.log("Seed data created successfully.");
   process.exit(0);
@@ -107,4 +94,3 @@ seedDatabase().catch((error) => {
   console.error(error);
   process.exit(1);
 });
-

@@ -1,16 +1,20 @@
 import { randomUUID } from "crypto";
 import express from "express";
-import { deriveStockStatus } from "../utils/inventory.js";
+import {
+  defaultCategories,
+  sampleMovements,
+  sampleProducts,
+} from "../data/defaultData.js";
+import { deriveStockStatus, slugify } from "../utils/inventory.js";
 
 const router = express.Router();
 
-const categories = [
-  { _id: "cat-office", name: "Office Essentials", slug: "office-essentials", accentColor: "#d6e6d8" },
-  { _id: "cat-electronics", name: "Electronics", slug: "electronics", accentColor: "#d9e7f2" },
-  { _id: "cat-home", name: "Home Decor", slug: "home-decor", accentColor: "#f4ddcf" },
-  { _id: "cat-packaging", name: "Packaging", slug: "packaging", accentColor: "#ece3d1" },
-  { _id: "cat-care", name: "Care Supplies", slug: "care-supplies", accentColor: "#f2dfd9" },
-];
+const categories = defaultCategories.map((category) => ({
+  _id: `cat-${slugify(category.name)}`,
+  name: category.name,
+  slug: slugify(category.name),
+  accentColor: category.accentColor,
+}));
 
 const users = [
   {
@@ -29,143 +33,51 @@ const users = [
   },
 ];
 
-const products = [
-  {
-    _id: "prd-1",
-    name: "Linen Storage Basket",
-    sku: "HD-102",
-    description: "Soft-tone woven basket for accessory organization.",
-    category: "cat-home",
-    supplier: "Bloom & Beam",
-    location: "Aisle A1",
-    quantity: 22,
-    reorderLevel: 10,
-    unitCost: 680,
-    unitPrice: 1150,
-    status: "Active",
-    createdAt: "2026-04-08T08:00:00.000Z",
-    updatedAt: "2026-04-08T10:10:00.000Z",
-  },
-  {
-    _id: "prd-2",
-    name: "Portable Label Printer",
-    sku: "EL-205",
-    description: "Compact wireless label printer for shelf tagging.",
-    category: "cat-electronics",
-    supplier: "North Circuit",
-    location: "Aisle C3",
-    quantity: 8,
-    reorderLevel: 6,
-    unitCost: 3100,
-    unitPrice: 4290,
-    status: "Active",
-    createdAt: "2026-04-08T08:15:00.000Z",
-    updatedAt: "2026-04-08T10:25:00.000Z",
-  },
-  {
-    _id: "prd-3",
-    name: "Eco Wrap Roll",
-    sku: "PK-310",
-    description: "Biodegradable wrap used for outbound packaging.",
-    category: "cat-packaging",
-    supplier: "PackSoft",
-    location: "Store Room 2",
-    quantity: 46,
-    reorderLevel: 18,
-    unitCost: 95,
-    unitPrice: 180,
-    status: "Active",
-    createdAt: "2026-04-08T08:25:00.000Z",
-    updatedAt: "2026-04-08T10:45:00.000Z",
-  },
-  {
-    _id: "prd-4",
-    name: "Desk Planner Pad",
-    sku: "OE-128",
-    description: "Neutral-tone daily planner pads for operations desk.",
-    category: "cat-office",
-    supplier: "Paper Nest",
-    location: "Aisle B1",
-    quantity: 14,
-    reorderLevel: 12,
-    unitCost: 130,
-    unitPrice: 249,
-    status: "Active",
-    createdAt: "2026-04-08T08:35:00.000Z",
-    updatedAt: "2026-04-08T10:50:00.000Z",
-  },
-  {
-    _id: "prd-5",
-    name: "Surface Care Spray",
-    sku: "CS-412",
-    description: "Inventory-safe cleaning spray for display zones.",
-    category: "cat-care",
-    supplier: "Clear Habit",
-    location: "Store Room 1",
-    quantity: 0,
-    reorderLevel: 8,
-    unitCost: 160,
-    unitPrice: 275,
-    status: "Out of Stock",
-    createdAt: "2026-04-08T08:45:00.000Z",
-    updatedAt: "2026-04-08T10:55:00.000Z",
-  },
-];
+const categoryIdByName = categories.reduce((accumulator, category) => {
+  accumulator[category.name] = category._id;
+  return accumulator;
+}, {});
 
-const movements = [
-  {
-    _id: "mov-1",
-    product: "prd-3",
-    type: "stock_in",
-    quantity: 46,
-    note: "Opening stock",
-    reference: "BOOT-003",
-    previousQuantity: 0,
-    newQuantity: 46,
-    performedBy: "usr-admin",
-    unitCost: 95,
-    createdAt: "2026-04-08T10:45:00.000Z",
-  },
-  {
-    _id: "mov-2",
-    product: "prd-2",
-    type: "stock_in",
-    quantity: 8,
-    note: "Opening stock",
-    reference: "BOOT-002",
-    previousQuantity: 0,
-    newQuantity: 8,
-    performedBy: "usr-admin",
-    unitCost: 3100,
-    createdAt: "2026-04-08T10:25:00.000Z",
-  },
-  {
-    _id: "mov-3",
-    product: "prd-1",
-    type: "stock_in",
-    quantity: 22,
-    note: "Opening stock",
-    reference: "BOOT-001",
-    previousQuantity: 0,
-    newQuantity: 22,
-    performedBy: "usr-admin",
-    unitCost: 680,
-    createdAt: "2026-04-08T10:10:00.000Z",
-  },
-  {
-    _id: "mov-4",
-    product: "prd-5",
-    type: "stock_out",
-    quantity: 5,
-    note: "Initial issue to store floor",
-    reference: "BOOT-004",
-    previousQuantity: 5,
-    newQuantity: 0,
-    performedBy: "usr-staff",
-    unitCost: 160,
-    createdAt: "2026-04-08T10:58:00.000Z",
-  },
-];
+const products = sampleProducts.map((product, index) => ({
+  _id: `prd-${index + 1}`,
+  name: product.name,
+  sku: product.sku,
+  description: product.description,
+  category: categoryIdByName[product.categoryName],
+  supplier: product.supplier,
+  location: product.location,
+  quantity: product.quantity,
+  reorderLevel: product.reorderLevel,
+  unitCost: product.unitCost,
+  unitPrice: product.unitPrice,
+  status: deriveStockStatus(product.quantity, product.reorderLevel),
+  createdAt: product.createdAt,
+  updatedAt: product.updatedAt,
+}));
+
+const productIdBySku = products.reduce((accumulator, product) => {
+  accumulator[product.sku] = product._id;
+  return accumulator;
+}, {});
+
+const productCostBySku = products.reduce((accumulator, product) => {
+  accumulator[product.sku] = product.unitCost;
+  return accumulator;
+}, {});
+
+const movements = sampleMovements.map((movement, index) => ({
+  _id: `mov-${index + 1}`,
+  product: productIdBySku[movement.sku],
+  type: movement.type,
+  quantity: movement.quantity,
+  note: movement.note,
+  reference: movement.reference,
+  previousQuantity: movement.previousQuantity,
+  newQuantity: movement.newQuantity,
+  performedBy: movement.performedByRole === "staff" ? "usr-staff" : "usr-admin",
+  unitCost: productCostBySku[movement.sku],
+  createdAt: movement.createdAt,
+}));
 
 const sessions = new Map();
 
