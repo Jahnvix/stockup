@@ -213,6 +213,7 @@ const CatalogStudioPage = () => {
       quantity: categoryProducts.reduce((sum, product) => sum + product.quantity, 0),
     };
   });
+  const leadRange = categoryCards.slice().sort((left, right) => right.quantity - left.quantity)[0];
 
   return (
     <section className="inventory-grid inventory-grid--enhanced">
@@ -224,6 +225,16 @@ const CatalogStudioPage = () => {
             Filter faster, update product details, and record stock movement without losing
             sight of what needs replenishment next.
           </p>
+          <div className="feature-pill-grid feature-pill-grid--compact">
+            <div className="feature-pill">
+              <span>Lead range</span>
+              <strong>{leadRange?.name || "N/A"}</strong>
+            </div>
+            <div className="feature-pill">
+              <span>Live products</span>
+              <strong>{products.length}</strong>
+            </div>
+          </div>
         </div>
         <div className="mini-stats-grid">
           <div className="mini-stat">
@@ -312,72 +323,73 @@ const CatalogStudioPage = () => {
         {error ? <p className="feedback feedback--error">{error}</p> : null}
         {feedback ? <p className="feedback feedback--success">{feedback}</p> : null}
 
-        <div className="table-wrap">
-          <table className="inventory-table">
-            <thead>
-              <tr>
-                <th>Product</th>
-                <th>Stock</th>
-                <th>Supplier</th>
-                <th>Value</th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {products.length === 0 ? (
-                <tr>
-                  <td colSpan="5" className="empty-cell">
-                    No products match the current filters.
-                  </td>
-                </tr>
-              ) : (
-                products.map((product) => (
-                  <tr key={product._id}>
-                    <td>
+        <div className="catalog-swimlane">
+          {products.length === 0 ? (
+            <p className="empty-cell">No products match the current filters.</p>
+          ) : (
+            products.map((product) => (
+              <article
+                className="catalog-card"
+                key={product._id}
+                style={{ "--product-accent": product.category?.accentColor || "#d9dcee" }}
+              >
+                <div className="catalog-card__media">
+                  <span>{product.category?.name?.slice(0, 2).toUpperCase() || "PR"}</span>
+                </div>
+                <div className="catalog-card__body">
+                  <div className="catalog-card__topline">
+                    <div>
                       <strong>{product.name}</strong>
                       <p>
                         {product.sku} / {product.category?.name}
                       </p>
-                      <p>{product.description}</p>
-                    </td>
-                    <td>
-                      <span
-                        className={`status-pill ${
-                          product.status === "Low Stock"
-                            ? "status-pill--low"
-                            : product.status === "Out of Stock"
-                              ? "status-pill--empty"
-                              : ""
-                        }`}
-                      >
-                        {product.quantity} units
-                      </span>
-                      <p>{product.status}</p>
-                    </td>
-                    <td>
+                    </div>
+                    <span
+                      className={`status-pill ${
+                        product.status === "Low Stock"
+                          ? "status-pill--low"
+                          : product.status === "Out of Stock"
+                            ? "status-pill--empty"
+                            : ""
+                      }`}
+                    >
+                      {product.status}
+                    </span>
+                  </div>
+                  <p className="catalog-card__description">{product.description}</p>
+                  <div className="catalog-card__metrics">
+                    <div>
+                      <span>Units</span>
+                      <strong>{product.quantity}</strong>
+                    </div>
+                    <div>
+                      <span>Supplier</span>
                       <strong>{product.supplier}</strong>
-                      <p>{product.location}</p>
-                    </td>
-                    <td>
-                      <strong>
-                        {currencyFormatter.format(product.quantity * product.unitCost)}
-                      </strong>
-                      <p>Selling at {currencyFormatter.format(product.unitPrice)}</p>
-                    </td>
-                    <td>
-                      <button
-                        type="button"
-                        className="ghost-button"
-                        onClick={() => editProduct(product)}
-                      >
-                        Edit
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                    </div>
+                    <div>
+                      <span>Location</span>
+                      <strong>{product.location}</strong>
+                    </div>
+                    <div>
+                      <span>Value</span>
+                      <strong>{currencyFormatter.format(product.quantity * product.unitCost)}</strong>
+                    </div>
+                  </div>
+                </div>
+                <div className="catalog-card__actions">
+                  <strong>{currencyFormatter.format(product.unitPrice)}</strong>
+                  <p>Selling price</p>
+                  <button
+                    type="button"
+                    className="ghost-button"
+                    onClick={() => editProduct(product)}
+                  >
+                    Edit
+                  </button>
+                </div>
+              </article>
+            ))
+          )}
         </div>
       </article>
 

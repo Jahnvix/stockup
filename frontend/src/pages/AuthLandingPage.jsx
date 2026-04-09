@@ -51,7 +51,7 @@ const AuthLandingPage = () => {
     <main className="auth-shell">
       <section className="auth-showcase">
         <p className="eyebrow">Inventory management system</p>
-        <h1>A softer retail dashboard for clothes, skincare, and bags.</h1>
+        <h1>A softer retail dashboard with more motion, depth, and clarity.</h1>
         <p>
           Manage premium product lines, monitor stock movement, and react to low-stock
           signals from a calm workspace that feels closer to a brand studio than a plain
@@ -63,23 +63,35 @@ const AuthLandingPage = () => {
           <span>Bags</span>
           <span>MERN stack</span>
         </div>
-        <div className="showcase-grid">
-          <div className="showcase-card">
-            <strong>Live dashboard</strong>
-            <p>See inventory value, category spread, and movement at a glance.</p>
+        <div className="auth-scene">
+          <div className="auth-widget auth-widget--tall">
+            <span className="auth-widget__label">Inventory Value</span>
+            <strong>INR 68.7K</strong>
+            <div className="auth-widget__bars">
+              <span />
+              <span />
+              <span />
+              <span />
+              <span />
+            </div>
           </div>
-          <div className="showcase-card">
-            <strong>Catalog editor</strong>
-            <p>Add new product lines, change pricing, and update stock thresholds fast.</p>
+          <div className="auth-widget auth-widget--rose">
+            <span className="auth-widget__label">Low Stock</span>
+            <strong>03</strong>
+            <p>Flagged for replenishment</p>
           </div>
-          <div className="showcase-card">
-            <strong>Movement log</strong>
-            <p>Track stock in, stock out, and adjustments in a single timeline.</p>
+          <div className="auth-widget auth-widget--sage">
+            <span className="auth-widget__label">Top Range</span>
+            <strong>Clothes</strong>
+            <p>Fastest-moving inventory family</p>
+          </div>
+          <div className="auth-widget auth-widget--mist">
+            <span className="auth-widget__label">Movement</span>
+            <strong>Live</strong>
+            <p>Stock in, stock out, and adjustments</p>
           </div>
         </div>
-        <p className="login-hint">
-          Starter admin: <code>admin@softstock.com</code> / <code>Admin@123</code>
-        </p>
+        <p className="muted-copy">Sign in with your assigned account to open the workspace.</p>
       </section>
 
       <section className="auth-card">

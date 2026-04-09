@@ -26,16 +26,7 @@ const BoutiqueLayout = () => {
               </p>
             </div>
           </div>
-          <div className="brand-stat-grid">
-            <div>
-              <strong>03</strong>
-              <span>Core ranges</span>
-            </div>
-            <div>
-              <strong>Live</strong>
-              <span>Stock monitor</span>
-            </div>
-          </div>
+          <div className="brand-wave" />
         </div>
 
         <div className="season-card">
@@ -86,6 +77,7 @@ const BoutiqueLayout = () => {
           <div className="page-header__meta">
             <span className="status-pill">Live stock workspace</span>
             <span className="date-chip">{todayLabel}</span>
+            <span className="status-pill">Welcome, {user?.name?.split(" ")[0] || "Team"}</span>
           </div>
         </header>
 

@@ -54,9 +54,17 @@ const RetailDashboardPage = () => {
     (sum, category) => sum + category.quantity,
     0
   );
+  const healthyCount =
+    summary.overview.totalProducts -
+    summary.overview.lowStockCount -
+    summary.overview.outOfStockCount;
+  const healthRatio = summary.overview.totalProducts
+    ? Math.round((healthyCount / summary.overview.totalProducts) * 100)
+    : 0;
   const topCategory = summary.categoryBreakdown
     .slice()
     .sort((left, right) => right.quantity - left.quantity)[0];
+  const chartPeak = Math.max(...summary.categoryBreakdown.map((category) => category.quantity), 1);
   const attentionItems = [
     ...summary.outOfStockProducts,
     ...summary.lowStockProducts.filter(
@@ -110,7 +118,7 @@ const RetailDashboardPage = () => {
         </div>
       </article>
 
-      <div className="stats-grid">
+      <div className="stats-grid stats-grid--floating">
         <StatCard
           label="Inventory Value"
           value={currencyFormatter.format(summary.overview.inventoryValue)}
@@ -137,43 +145,115 @@ const RetailDashboardPage = () => {
         />
       </div>
 
-      <article className="content-panel">
+      <article className="content-panel chart-panel">
         <div className="panel-header">
           <div>
-            <p className="eyebrow">Category spotlight</p>
-            <h3>Where inventory is concentrated</h3>
+            <p className="eyebrow">Movement overview</p>
+            <h3>Inventory spread by category</h3>
           </div>
+          <span className="status-pill">Updated live</span>
         </div>
-        <div className="category-spotlight-grid">
+        <div className="activity-chart">
           {summary.categoryBreakdown.map((category) => {
             const share = summary.overview.totalProducts
               ? Math.round((category.itemCount / summary.overview.totalProducts) * 100)
               : 0;
 
             return (
-              <div className="spotlight-card" key={category.id}>
-                <div className="spotlight-card__header">
-                  <span
-                    className="spotlight-card__dot"
-                    style={{ background: category.accentColor }}
-                  />
-                  <strong>{category.name}</strong>
-                </div>
-                <p className="muted-copy">
-                  {category.itemCount} styles across {category.quantity} units on hand.
-                </p>
-                <div className="spotlight-card__meter">
+              <div className="activity-chart__column" key={category.id}>
+                <div className="activity-chart__bar-wrap">
                   <div
+                    className="activity-chart__bar"
                     style={{
-                      width: `${Math.max(16, share)}%`,
+                      height: `${Math.max(26, (category.quantity / chartPeak) * 100)}%`,
                       background: category.accentColor,
                     }}
                   />
                 </div>
-                <small>{share}% of the active catalog</small>
+                <strong>{category.quantity}</strong>
+                <span>{category.name}</span>
+                <small>{share}% of catalog</small>
               </div>
             );
           })}
+        </div>
+      </article>
+
+      <article className="content-panel orbit-panel">
+        <div className="panel-header">
+          <div>
+            <p className="eyebrow">Stock health</p>
+            <h3>Healthy versus attention-needed items</h3>
+          </div>
+        </div>
+        <div className="health-orbit">
+          <div
+            className="health-orbit__ring"
+            style={{
+              background: `conic-gradient(#7bb196 0 ${healthRatio}%, rgba(123, 177, 150, 0.16) ${healthRatio}% 100%)`,
+            }}
+          >
+            <div className="health-orbit__center">
+              <strong>{healthRatio}%</strong>
+              <span>Healthy stock</span>
+            </div>
+          </div>
+          <div className="health-orbit__legend">
+            <div>
+              <span className="legend-dot legend-dot--green" />
+              <p>
+                <strong>{healthyCount}</strong>
+                <small>Well stocked</small>
+              </p>
+            </div>
+            <div>
+              <span className="legend-dot legend-dot--rose" />
+              <p>
+                <strong>{summary.overview.lowStockCount}</strong>
+                <small>Low stock</small>
+              </p>
+            </div>
+            <div>
+              <span className="legend-dot legend-dot--sand" />
+              <p>
+                <strong>{summary.overview.outOfStockCount}</strong>
+                <small>Out of stock</small>
+              </p>
+            </div>
+          </div>
+        </div>
+        <p className="quick-note">
+          Fastest-moving category right now: <strong>{topCategory?.name || "N/A"}</strong>
+        </p>
+      </article>
+
+      <article className="content-panel content-panel--wide range-panel">
+        <div className="panel-header">
+          <div>
+            <p className="eyebrow">Product ranges</p>
+            <h3>Collections performing across the dashboard</h3>
+          </div>
+        </div>
+        <div className="range-showcase">
+          {summary.categoryBreakdown.map((category) => (
+            <div
+              className="range-card"
+              key={category.id}
+              style={{ "--range-accent": category.accentColor }}
+            >
+              <div className="range-card__visual">
+                <span>{category.name.slice(0, 2).toUpperCase()}</span>
+              </div>
+              <div className="range-card__meta">
+                <strong>{category.name}</strong>
+                <p>{category.itemCount} listed products</p>
+                <div className="range-card__stats">
+                  <span>{category.quantity} units</span>
+                  <span>{currencyFormatter.format(category.quantity * 650)}</span>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </article>
 
@@ -210,9 +290,6 @@ const RetailDashboardPage = () => {
             ))
           )}
         </div>
-        <p className="quick-note">
-          Fastest-moving category right now: <strong>{topCategory?.name || "N/A"}</strong>
-        </p>
       </article>
 
       <article className="content-panel content-panel--wide">
