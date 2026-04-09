@@ -64,13 +64,13 @@ const RetailDashboardPage = () => {
   const topCategory = summary.categoryBreakdown
     .slice()
     .sort((left, right) => right.quantity - left.quantity)[0];
-  const chartPeak = Math.max(...summary.categoryBreakdown.map((category) => category.quantity), 1);
   const attentionItems = [
     ...summary.outOfStockProducts,
     ...summary.lowStockProducts.filter(
       (product) => !summary.outOfStockProducts.some((empty) => empty._id === product._id)
     ),
   ];
+  const topAttentionItems = attentionItems.slice(0, 4);
 
   return (
     <section className="dashboard-grid">
@@ -145,81 +145,61 @@ const RetailDashboardPage = () => {
         />
       </div>
 
-      <article className="content-panel chart-panel">
+      <article className="content-panel category-panel">
         <div className="panel-header">
           <div>
-            <p className="eyebrow">Movement overview</p>
-            <h3>Inventory spread by category</h3>
+            <p className="eyebrow">Category spotlight</p>
+            <h3>Inventory ranges as bold summary cards</h3>
           </div>
           <span className="status-pill">Updated live</span>
         </div>
-        <div className="activity-chart">
+        <div className="dashboard-card-grid">
           {summary.categoryBreakdown.map((category) => {
             const share = summary.overview.totalProducts
               ? Math.round((category.itemCount / summary.overview.totalProducts) * 100)
               : 0;
 
             return (
-              <div className="activity-chart__column" key={category.id}>
-                <div className="activity-chart__bar-wrap">
-                  <div
-                    className="activity-chart__bar"
-                    style={{
-                      height: `${Math.max(26, (category.quantity / chartPeak) * 100)}%`,
-                      background: category.accentColor,
-                    }}
-                  />
-                </div>
+              <div
+                className="dashboard-card dashboard-card--category"
+                key={category.id}
+                style={{ "--card-accent": category.accentColor }}
+              >
+                <span className="dashboard-card__label">{category.name}</span>
                 <strong>{category.quantity}</strong>
-                <span>{category.name}</span>
-                <small>{share}% of catalog</small>
+                <p>{category.itemCount} active products in this range.</p>
+                <div className="dashboard-card__meta">
+                  <span>{share}% catalog share</span>
+                  <span>{currencyFormatter.format(category.quantity * 650)}</span>
+                </div>
               </div>
             );
           })}
         </div>
       </article>
 
-      <article className="content-panel orbit-panel">
+      <article className="content-panel health-panel">
         <div className="panel-header">
           <div>
             <p className="eyebrow">Stock health</p>
-            <h3>Healthy versus attention-needed items</h3>
+            <h3>Quick health cards for inventory decisions</h3>
           </div>
         </div>
-        <div className="health-orbit">
-          <div
-            className="health-orbit__ring"
-            style={{
-              background: `conic-gradient(#7bb196 0 ${healthRatio}%, rgba(123, 177, 150, 0.16) ${healthRatio}% 100%)`,
-            }}
-          >
-            <div className="health-orbit__center">
-              <strong>{healthRatio}%</strong>
-              <span>Healthy stock</span>
-            </div>
+        <div className="health-card-grid">
+          <div className="health-card health-card--green">
+            <span className="dashboard-card__label">Healthy stock</span>
+            <strong>{healthRatio}%</strong>
+            <p>{healthyCount} products are currently above reorder level.</p>
           </div>
-          <div className="health-orbit__legend">
-            <div>
-              <span className="legend-dot legend-dot--green" />
-              <p>
-                <strong>{healthyCount}</strong>
-                <small>Well stocked</small>
-              </p>
-            </div>
-            <div>
-              <span className="legend-dot legend-dot--rose" />
-              <p>
-                <strong>{summary.overview.lowStockCount}</strong>
-                <small>Low stock</small>
-              </p>
-            </div>
-            <div>
-              <span className="legend-dot legend-dot--sand" />
-              <p>
-                <strong>{summary.overview.outOfStockCount}</strong>
-                <small>Out of stock</small>
-              </p>
-            </div>
+          <div className="health-card health-card--amber">
+            <span className="dashboard-card__label">Low stock</span>
+            <strong>{summary.overview.lowStockCount}</strong>
+            <p>These lines should be restocked before the next demand spike.</p>
+          </div>
+          <div className="health-card health-card--pink">
+            <span className="dashboard-card__label">Out of stock</span>
+            <strong>{summary.overview.outOfStockCount}</strong>
+            <p>These products need immediate replenishment or replacement.</p>
           </div>
         </div>
         <p className="quick-note">
@@ -257,26 +237,23 @@ const RetailDashboardPage = () => {
         </div>
       </article>
 
-      <article className="content-panel">
+      <article className="content-panel content-panel--wide attention-panel">
         <div className="panel-header">
           <div>
             <p className="eyebrow">Reorder radar</p>
             <h3>Items that need the next stock decision</h3>
           </div>
         </div>
-        <div className="stack-list">
-          {attentionItems.length === 0 ? (
+        <div className="dashboard-card-grid dashboard-card-grid--compact">
+          {topAttentionItems.length === 0 ? (
             <p className="muted-copy">Everything is comfortably above reorder level.</p>
           ) : (
-            attentionItems.map((product) => (
-              <div className="list-row" key={product._id}>
-                <div>
-                  <strong>{product.name}</strong>
-                  <p>
-                    {product.sku} / {product.category?.name}
-                  </p>
-                </div>
-                <div className="pill-group">
+            topAttentionItems.map((product) => (
+              <div className="dashboard-card dashboard-card--alert" key={product._id}>
+                <span className="dashboard-card__label">{product.category?.name}</span>
+                <strong>{product.name}</strong>
+                <p>{product.sku}</p>
+                <div className="dashboard-card__meta">
                   <span
                     className={`status-pill ${
                       product.quantity <= 0 ? "status-pill--empty" : "status-pill--low"

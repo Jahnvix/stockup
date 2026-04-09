@@ -1,698 +1,1181 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SPM Report - Inventory Management System</title>
-    <style>
-      :root {
-        --ink: #2f2a24;
-        --muted: #675f57;
-        --line: #d8d0c6;
-        --paper: #fffdf8;
-        --sage: #d8e4d5;
-        --sky: #dae8ef;
-        --peach: #f5ddd0;
-        --sand: #ece0cf;
-        --rose: #f0ddda;
-      }
 
-      * {
-        box-sizing: border-box;
-      }
+        <!doctype html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <title>SPM Report - Inventory Management System</title>
+          <style>
+            @page {
+              size: A4;
+              margin: 14mm;
+            }
 
-      body {
-        margin: 0;
-        background: #f4eee5;
-        color: var(--ink);
-        font-family: "Book Antiqua", Georgia, serif;
-        line-height: 1.55;
-      }
+            * { box-sizing: border-box; }
 
-      .report {
-        width: min(980px, calc(100vw - 32px));
-        margin: 24px auto;
-        background: var(--paper);
-        border: 1px solid var(--line);
-        box-shadow: 0 20px 50px rgba(93, 74, 58, 0.12);
-      }
+            body {
+              margin: 0;
+              background: #fff;
+              color: #000;
+              font-family: "Times New Roman", Georgia, serif;
+            }
 
-      .page {
-        padding: 42px 54px;
-        border-bottom: 1px solid #eee5d8;
-      }
+            .page {
+              min-height: 267mm;
+              display: flex;
+              flex-direction: column;
+              page-break-after: always;
+            }
 
-      .page-break {
-        break-before: page;
-      }
+            .page:last-child { page-break-after: auto; }
 
-      h1,
-      h2,
-      h3,
-      h4 {
-        margin: 0 0 10px;
-      }
+            .page-header, .page-footer {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              font-size: 11px;
+            }
 
-      h1 {
-        font-size: 34px;
-        line-height: 1.1;
-      }
+            .page-header {
+              border-bottom: 1px solid #000;
+              padding-bottom: 4px;
+              margin-bottom: 10px;
+              text-transform: uppercase;
+              letter-spacing: 0.08em;
+            }
 
-      h2 {
-        margin-top: 20px;
-        font-size: 25px;
-      }
+            .page-body { flex: 1; }
 
-      h3 {
-        margin-top: 18px;
-        font-size: 19px;
-      }
+            .page-footer {
+              border-top: 1px solid #000;
+              padding-top: 5px;
+              margin-top: 10px;
+            }
 
-      p,
-      li {
-        font-size: 14px;
-      }
+            .cover-page { justify-content: center; }
 
-      .cover {
-        min-height: 1120px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        background:
-          radial-gradient(circle at top right, rgba(218, 232, 239, 0.85), transparent 28%),
-          radial-gradient(circle at bottom left, rgba(245, 221, 208, 0.85), transparent 30%),
-          linear-gradient(180deg, #fffdf9, #f6efe5);
-      }
+            .cover-box {
+              min-height: 206mm;
+              border: 1.5px solid #000;
+              padding: 18mm 14mm;
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+            }
 
-      .cover-block {
-        max-width: 700px;
-      }
+            .cover-eyebrow {
+              text-transform: uppercase;
+              letter-spacing: 0.16em;
+              font-size: 12px;
+              margin: 0 0 12px 0;
+              text-align: center;
+            }
 
-      .eyebrow {
-        text-transform: uppercase;
-        letter-spacing: 0.18em;
-        font-size: 11px;
-        color: var(--muted);
-      }
+            .lead {
+              text-align: center;
+              font-size: 15px;
+              margin: 0 auto 16px auto;
+              max-width: 154mm;
+            }
 
-      .hero-title {
-        margin: 18px 0;
-      }
+            .meta-grid {
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 10px;
+              margin-top: 10px;
+            }
 
-      .meta-grid,
-      .summary-grid,
-      .cost-grid {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 12px;
-      }
+            .meta-card {
+              border: 1px solid #000;
+              padding: 8px 10px;
+              display: flex;
+              flex-direction: column;
+              gap: 4px;
+            }
 
-      .meta-card,
-      .summary-card {
-        padding: 14px 16px;
-        border: 1px solid var(--line);
-        border-radius: 16px;
-      }
+            h1 {
+              font-size: 32px;
+              margin: 0 0 16px 0;
+              text-align: center;
+            }
 
-      .meta-card:nth-child(1),
-      .summary-card:nth-child(1) {
-        background: var(--sage);
-      }
+            h2 {
+              font-size: 22px;
+              margin: 0 0 10px 0;
+              padding-bottom: 6px;
+              border-bottom: 1px solid #000;
+            }
 
-      .meta-card:nth-child(2),
-      .summary-card:nth-child(2) {
-        background: var(--sky);
-      }
+            h3 {
+              font-size: 16px;
+              margin: 0 0 8px 0;
+            }
 
-      .meta-card:nth-child(3),
-      .summary-card:nth-child(3) {
-        background: var(--peach);
-      }
+            h4 {
+              font-size: 14px;
+              margin: 0 0 6px 0;
+            }
 
-      .meta-card:nth-child(4),
-      .summary-card:nth-child(4) {
-        background: var(--sand);
-      }
+            p, li, td, th, div {
+              font-size: 12.5px;
+              line-height: 1.45;
+              color: #000;
+            }
 
-      .section-label {
-        margin-top: 26px;
-        padding: 8px 12px;
-        border-left: 4px solid #9ea88e;
-        background: #faf5ec;
-        font-weight: 700;
-      }
+            .section { margin-bottom: 12px; }
 
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 12px 0 18px;
-      }
+            table {
+              width: 100%;
+              border-collapse: collapse;
+              margin: 8px 0 10px 0;
+            }
 
-      th,
-      td {
-        padding: 10px 12px;
-        border: 1px solid var(--line);
-        vertical-align: top;
-        font-size: 13px;
-      }
+            th, td {
+              border: 1px solid #000;
+              padding: 6px 7px;
+              vertical-align: top;
+            }
 
-      th {
-        background: #f4ede4;
-        text-align: left;
-      }
+            th { background: #ededed; }
 
-      .diagram {
-        margin: 14px 0 22px;
-        padding: 14px;
-        border: 1px solid var(--line);
-        border-radius: 18px;
-        background: #fffaf3;
-      }
+            ul, ol {
+              margin: 6px 0 8px 18px;
+              padding: 0;
+            }
 
-      .diagram svg {
-        width: 100%;
-        height: auto;
-        display: block;
-      }
+            .diagram-block {
+              border: 1px solid #000;
+              padding: 8px;
+              margin-bottom: 10px;
+            }
 
-      .two-col {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 18px;
-      }
+            .diagram-block svg {
+              width: 100%;
+              height: auto;
+              display: block;
+            }
+          </style>
+        </head>
+        <body>
 
-      .callout {
-        padding: 14px 16px;
-        border-radius: 16px;
-        background: #faf5ec;
-        border: 1px solid var(--line);
-      }
+<section class="page cover-page">
+  <div class="cover-box">
+    <p class="cover-eyebrow">Software Project Management Report</p>
+    <h1>Inventory Management System</h1>
+    <p class="lead">
+      A detailed academic project report for a full-stack MERN inventory solution
+      with secure authentication, product catalog management, stock movement
+      tracking, dashboard insights, and a soft-tone responsive user interface.
+    </p>
+    <div class="meta-grid">
+      <div class="meta-card"><strong>Project Type</strong><span>Full-stack MERN web application</span></div>
+      <div class="meta-card"><strong>Technology Stack</strong><span>MongoDB, Express, React, Node.js, Vite</span></div>
+      <div class="meta-card"><strong>Documentation Style</strong><span>SPM and SRS report in experiment format</span></div>
+      <div class="meta-card"><strong>Date</strong><span>09 April 2026</span></div>
+    </div>
+  </div>
+  <footer class="page-footer">Page 1</footer>
+</section>
 
-      .gantt {
-        display: grid;
-        grid-template-columns: 240px repeat(8, 1fr);
-        border: 1px solid var(--line);
-        border-bottom: 0;
-        margin-top: 12px;
-      }
+<section class="page">
+  <header class="page-header">
+    <div>Front Matter</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Declaration and Report Note</h2>
+    <div class='section'><h3>Document Note</h3><p>This report has been prepared for the Inventory Management System project in the same broad academic presentation style as the supplied sample file. It uses experiment-based organization and expanded explanatory material so the final report is substantial enough for formal submission.</p><p>The formatting is intentionally black-and-white for print readability. Diagrams are monochrome, headings are structured, and each page is explicitly separated for clean PDF generation.</p></div><div class='section'><h3>Report Components</h3><ul><li>Problem statement and SRS</li><li>UML-style diagrams</li><li>WBS and Gantt planning</li><li>Software metrics and costing</li><li>Resource allocation and team organization</li><li>Testing, risk, feasibility, implementation, and conclusion</li></ul></div>
+  </main>
+  <footer class="page-footer">Page 2</footer>
+</section>
 
-      .gantt > div {
-        padding: 10px 8px;
-        border-bottom: 1px solid var(--line);
-        border-right: 1px solid var(--line);
-        min-height: 44px;
-        font-size: 12px;
-      }
+<section class="page">
+  <header class="page-header">
+    <div>Front Matter</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Table of Contents</h2>
+    <table><thead><tr><th>Section</th><th>Page</th></tr></thead><tbody><tr><td>Abstract and Project Summary</td><td>4</td></tr><tr><td>Aim</td><td>5</td></tr><tr><td>Theory of Software Project Management</td><td>6</td></tr><tr><td>Problem Statement Part I</td><td>7</td></tr><tr><td>Problem Statement Part II</td><td>8</td></tr><tr><td>Proposed System Objectives</td><td>9</td></tr><tr><td>SRS Introduction</td><td>10</td></tr><tr><td>Definitions, Acronyms, and Overview</td><td>11</td></tr><tr><td>Product Perspective</td><td>12</td></tr><tr><td>Product Functions</td><td>13</td></tr><tr><td>User Classes and Characteristics</td><td>14</td></tr><tr><td>Operating Environment</td><td>15</td></tr><tr><td>Design Constraints and Assumptions</td><td>16</td></tr><tr><td>Functional Requirements: Authentication</td><td>17</td></tr><tr><td>Functional Requirements: Catalog Management</td><td>18</td></tr><tr><td>Functional Requirements: Stock Movement</td><td>19</td></tr><tr><td>Functional Requirements: Dashboard and Reporting</td><td>20</td></tr><tr><td>Non-Functional Requirements</td><td>21</td></tr><tr><td>External Interface Requirements</td><td>22</td></tr><tr><td>Data Dictionary</td><td>23</td></tr><tr><td>Use Case Diagram</td><td>24</td></tr><tr><td>Use Case Diagram Explanation</td><td>25</td></tr><tr><td>Class Diagram</td><td>26</td></tr><tr><td>Class Diagram Explanation</td><td>27</td></tr><tr><td>Activity Diagram</td><td>28</td></tr><tr><td>Sequence Diagram</td><td>29</td></tr><tr><td>Component Diagram</td><td>30</td></tr><tr><td>Deployment Diagram</td><td>31</td></tr><tr><td>Authentication Module</td><td>32</td></tr><tr><td>Catalog Module</td><td>33</td></tr><tr><td>Stock Movement Module</td><td>34</td></tr><tr><td>Dashboard Module</td><td>35</td></tr><tr><td>Frontend Design Strategy</td><td>36</td></tr><tr><td>Backend Design Strategy</td><td>37</td></tr><tr><td>Input Design</td><td>38</td></tr><tr><td>Output Design</td><td>39</td></tr><tr><td>Aim and Theory of WBS</td><td>40</td></tr><tr><td>WBS Part I</td><td>41</td></tr><tr><td>WBS Part II</td><td>42</td></tr><tr><td>WBS Output and Interpretation</td><td>43</td></tr><tr><td>Aim and Theory of Gantt Chart</td><td>44</td></tr><tr><td>Gantt Schedule</td><td>45</td></tr><tr><td>Milestones and Dependencies</td><td>46</td></tr><tr><td>Schedule Risk and Control</td><td>47</td></tr><tr><td>Aim and Theory of Software Metrics</td><td>48</td></tr><tr><td>Size Metrics</td><td>49</td></tr><tr><td>Effort and Time Metrics</td><td>50</td></tr><tr><td>Productivity and Quality Metrics</td><td>51</td></tr><tr><td>Metric Interpretation and Output</td><td>52</td></tr><tr><td>Aim and Theory of Cost Estimation</td><td>53</td></tr><tr><td>Development Cost Estimation</td><td>54</td></tr><tr><td>Testing, Documentation, and Support Cost</td><td>55</td></tr><tr><td>Total Cost and Cost Observation</td><td>56</td></tr><tr><td>Aim and Theory of Resource Allocation</td><td>57</td></tr><tr><td>Human Resource Allocation</td><td>58</td></tr><tr><td>Hardware and Software Allocation</td><td>59</td></tr><tr><td>Time Resource Allocation and Observation</td><td>60</td></tr><tr><td>Aim and Theory of Team Structure</td><td>61</td></tr><tr><td>Team Roles and Responsibilities</td><td>62</td></tr><tr><td>Responsibility Matrix</td><td>63</td></tr><tr><td>Communication and Governance Plan</td><td>64</td></tr><tr><td>Testing Strategy</td><td>65</td></tr><tr><td>Representative Test Cases</td><td>66</td></tr><tr><td>Validation and Error Handling</td><td>67</td></tr><tr><td>Risk Management</td><td>68</td></tr><tr><td>Feasibility Analysis</td><td>69</td></tr><tr><td>Implementation Summary</td><td>70</td></tr><tr><td>Deployment Notes</td><td>71</td></tr><tr><td>Future Enhancements</td><td>72</td></tr><tr><td>Conclusion</td><td>73</td></tr><tr><td>References</td><td>74</td></tr></tbody></table><div class='section'><h3>Document Note</h3><p>This report follows the same broad academic pattern as the sample document: experiment-wise presentation, detailed theory, problem statement, software requirements specification, UML diagrams, planning artefacts, metrics, cost analysis, resource allocation, team organization, and concluding observations.</p><p>The final report is intentionally formatted in black-and-white text for print-friendly submission. The material is expanded so the generated PDF reaches a length comparable to the sample file.</p></div>
+  </main>
+  <footer class="page-footer">Page 3</footer>
+</section>
 
-      .gantt .head {
-        background: #f4ede4;
-        font-weight: 700;
-      }
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-01</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Abstract and Project Summary</h2>
+    <div class='section'><h3>Abstract</h3><p>The Inventory Management System is a full-stack MERN application created to support organized product records, stock movement tracking, and dashboard-based inventory visibility. The project responds to the practical need for a centralized inventory platform in place of disconnected spreadsheets and manual registers.</p><p>The implemented application allows users to sign in, manage products, group records into categories, track stock changes, and observe operational status through a dashboard. The codebase includes a React frontend, an Express backend, and a Mongo-oriented design with a stable demo runtime for local execution.</p><p>This report documents the project in an academic style parallel to the supplied sample, covering aim, theory, problem statement, detailed SRS, diagrams, WBS, Gantt planning, metrics, costing, resource planning, team structure, testing, risk, feasibility, implementation, and conclusion.</p></div><div class='section'><h3>Project Snapshot</h3><table><thead><tr><th>Item</th><th>Details</th></tr></thead><tbody><tr><td>Project Name</td><td>Inventory Management System</td></tr><tr><td>Architecture</td><td>Client-server MERN architecture</td></tr><tr><td>Primary Users</td><td>Admin and Staff</td></tr><tr><td>Core Modules</td><td>Authentication, Catalog, Stock Movement, Dashboard</td></tr><tr><td>Deployment Readiness</td><td>GitHub + Render deployment support prepared</td></tr><tr><td>Documentation Goal</td><td>Detailed SPM/SRS report matching the sample style</td></tr></tbody></table></div>
+  </main>
+  <footer class="page-footer">Page 4</footer>
+</section>
 
-      .bar-sage,
-      .bar-sky,
-      .bar-peach {
-        border-radius: 999px;
-      }
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-01</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Aim</h2>
+    <div class='section'><h3>Aim Statement</h3><p>To study, analyze, design, implement, and document an Inventory Management System and to prepare a complete software project management report in the same experiment-oriented academic style as the reference sample.</p></div><div class='section'><h3>Specific Goals</h3><ol><li>Understand the inventory management problem and the limitations of manual systems.</li><li>Prepare a detailed Software Requirements Specification.</li><li>Model the system through UML and project planning artefacts.</li><li>Develop a working MERN solution with inventory and dashboard features.</li><li>Document the project in a print-ready SPM report of comparable length to the sample.</li></ol></div>
+  </main>
+  <footer class="page-footer">Page 5</footer>
+</section>
 
-      .bar-sage {
-        background: var(--sage);
-      }
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-01</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Theory of Software Project Management</h2>
+    <div class='section'><h3>Theory</h3><p>Software Project Management is the discipline through which software work is planned, organized, monitored, and controlled. It ensures that technical work is aligned with goals, time limits, budget assumptions, and quality expectations.</p><p>A software project cannot be managed only by coding. Requirements, scheduling, design, testing, deployment preparation, documentation, and risk control all interact with one another. Good management therefore creates the conditions in which coding can actually succeed.</p><p>For an inventory system, project management is particularly relevant because the domain includes both information accuracy and process accuracy. A small defect in quantity handling can lead to visible operational mistakes, which makes disciplined design and verification essential.</p><p>This report adopts that discipline by connecting requirement engineering, design modelling, planning, cost analysis, and implementation into one coherent academic narrative.</p></div>
+  </main>
+  <footer class="page-footer">Page 6</footer>
+</section>
 
-      .bar-sky {
-        background: var(--sky);
-      }
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-01</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Problem Statement Part I</h2>
+    <div class='section'><h3>Discussion</h3><p>Existing System Study is an important part of the Inventory Management System because it directly affects understanding present inventory limitations. In an academic software project, this area must be documented clearly so the reviewer can understand why the chosen design and planning decisions are reasonable.</p><p>The project approaches existing system study through a practical MERN perspective. Instead of treating the subject as an isolated theory topic, the report connects it with inventory tasks such as product registration, quantity tracking, stock validation, dashboard reporting, and role-based usage.</p><p>From a management angle, existing system study influences scope stability, implementation order, testing effort, and maintenance readiness. Therefore it deserves dedicated space in the report rather than being merged into a short summary.</p></div><div class='section'><h3>Key Points</h3><ul><li>Manual and spreadsheet-driven record keeping often produces duplicate or stale data.</li><li>Warehouse staff may not have one shared live source of truth for current stock.</li><li>Reorder decisions are delayed because alerts are not built into the process.</li><li>Movement history is hard to trace when logs are informal or distributed.</li></ul></div><div class='section'><h3>Observation</h3><p>The study of the existing environment shows a strong need for centralization, validation, and timely visibility.</p></div>
+  </main>
+  <footer class="page-footer">Page 7</footer>
+</section>
 
-      .bar-peach {
-        background: var(--peach);
-      }
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-01</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Problem Statement Part II</h2>
+    <div class='section'><h3>Discussion</h3><p>Operational Challenges is an important part of the Inventory Management System because it directly affects stock visibility and reliability. In an academic software project, this area must be documented clearly so the reviewer can understand why the chosen design and planning decisions are reasonable.</p><p>The project approaches operational challenges through a practical MERN perspective. Instead of treating the subject as an isolated theory topic, the report connects it with inventory tasks such as product registration, quantity tracking, stock validation, dashboard reporting, and role-based usage.</p><p>From a management angle, operational challenges influences scope stability, implementation order, testing effort, and maintenance readiness. Therefore it deserves dedicated space in the report rather than being merged into a short summary.</p></div><div class='section'><h3>Key Points</h3><ul><li>Users need quick answers about available quantity and item location.</li><li>Managers need low-stock signals before shortages become operational problems.</li><li>Teams need movement history to investigate mismatches and accountability.</li><li>Organizations need a more reliable estimate of inventory value.</li></ul></div><div class='section'><h3>Observation</h3><p>The project therefore focuses on a system that reduces ambiguity, shortens lookup effort, and makes stock state easier to trust.</p></div>
+  </main>
+  <footer class="page-footer">Page 8</footer>
+</section>
 
-      @media print {
-        body {
-          background: white;
-        }
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-01</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Proposed System Objectives</h2>
+    <div class='section'><h3>Primary Objectives</h3><ol><li>Create a centralized product and category repository.</li><li>Enable secure user authentication and protected access to inventory functions.</li><li>Support stock-in, stock-out, and adjustment operations with validation.</li><li>Provide dashboard insights for value, category spread, and low-stock situations.</li><li>Offer a calm, readable soft-tone interface for routine operations.</li></ol></div><div class='section'><h3>Expected Outcomes</h3><ul><li>Reduced inventory confusion and duplicate record handling.</li><li>Faster product lookup and movement logging.</li><li>Improved visibility into reorder-sensitive stock conditions.</li><li>A maintainable academic MERN codebase ready for further extension.</li></ul></div>
+  </main>
+  <footer class="page-footer">Page 9</footer>
+</section>
 
-        .report {
-          width: auto;
-          margin: 0;
-          box-shadow: none;
-          border: 0;
-        }
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-01</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>SRS Introduction</h2>
+    <div class='section'><h3>Purpose of the SRS</h3><p>The Software Requirements Specification defines what the Inventory Management System must do and under which assumptions it will operate. It serves developers, testers, project reviewers, and stakeholders by giving them one structured reference point.</p><p>The SRS is especially important for this project because stock-related behavior should not be left implicit. Validation rules, user roles, and data relationships need to be stated clearly before or alongside implementation.</p></div><div class='section'><h3>Scope of the SRS</h3><p>The SRS covers system boundaries, user classes, functional requirements, non-functional requirements, interfaces, design assumptions, and requirement-linked diagrams for the Inventory Management System.</p></div>
+  </main>
+  <footer class="page-footer">Page 10</footer>
+</section>
 
-        .page {
-          border-bottom: 0;
-          min-height: 0;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <main class="report">
-      <section class="page cover">
-        <div class="cover-block">
-          <p class="eyebrow">Software Project Management Report</p>
-          <h1 class="hero-title">Inventory Management System</h1>
-          <p>
-            A full-stack MERN project designed for inventory visibility, stock control,
-            movement tracking, and low-stock awareness through a soft-tone responsive web
-            interface.
-          </p>
-        </div>
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-01</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Definitions, Acronyms, and Overview</h2>
+    <table><thead><tr><th>Term</th><th>Meaning</th></tr></thead><tbody><tr><td>SRS</td><td>Software Requirements Specification</td></tr><tr><td>UI</td><td>User Interface</td></tr><tr><td>API</td><td>Application Programming Interface</td></tr><tr><td>JWT</td><td>JSON Web Token</td></tr><tr><td>CRUD</td><td>Create, Read, Update, Delete</td></tr><tr><td>WBS</td><td>Work Breakdown Structure</td></tr><tr><td>SDLC</td><td>Software Development Life Cycle</td></tr></tbody></table><div class='section'><h3>Overview</h3><p>The report is organized into experiments to match academic presentation. Early pages focus on requirements and design. Middle pages focus on planning and measurement. Later pages focus on resources, testing, implementation, and project closure.</p><p>This structure mirrors the logic of real project work: understand the problem first, then plan and model the system, then estimate and organize resources, and finally review implementation and quality.</p></div>
+  </main>
+  <footer class="page-footer">Page 11</footer>
+</section>
 
-        <div class="meta-grid">
-          <div class="meta-card">
-            <strong>Project Type</strong>
-            <p>Full-stack MERN web application</p>
-          </div>
-          <div class="meta-card">
-            <strong>Technology Stack</strong>
-            <p>MongoDB, Express, React, Node.js, Vite, JWT</p>
-          </div>
-          <div class="meta-card">
-            <strong>Prepared For</strong>
-            <p>Inventory Management System academic project documentation</p>
-          </div>
-          <div class="meta-card">
-            <strong>Date</strong>
-            <p>08 April 2026</p>
-          </div>
-        </div>
-      </section>
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-01</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Product Perspective</h2>
+    <div class='section'><h3>Discussion</h3><p>Product Perspective is an important part of the Inventory Management System because it directly affects system architecture and positioning. In an academic software project, this area must be documented clearly so the reviewer can understand why the chosen design and planning decisions are reasonable.</p><p>The project approaches product perspective through a practical MERN perspective. Instead of treating the subject as an isolated theory topic, the report connects it with inventory tasks such as product registration, quantity tracking, stock validation, dashboard reporting, and role-based usage.</p><p>From a management angle, product perspective influences scope stability, implementation order, testing effort, and maintenance readiness. Therefore it deserves dedicated space in the report rather than being merged into a short summary.</p></div><div class='section'><h3>Key Points</h3><ul><li>The system is a standalone web application using a client-server model.</li><li>The React frontend provides interaction and display.</li><li>The Express backend provides validation, routing, and business logic.</li><li>MongoDB acts as the persistent data layer in standard MERN mode.</li></ul></div><div class='section'><h3>Observation</h3><p>The product perspective confirms that the system is best understood as a layered web application rather than a single monolithic script.</p></div>
+  </main>
+  <footer class="page-footer">Page 12</footer>
+</section>
 
-      <section class="page page-break">
-        <p class="eyebrow">Experiment-01</p>
-        <h2>Aim</h2>
-        <p>
-          To study, analyze, design, and document the requirements of an Inventory
-          Management System by preparing a detailed problem statement, Software
-          Requirements Specification (SRS), and UML diagrams for a MERN-based solution.
-        </p>
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-01</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Product Functions</h2>
+    <div class='section'><h3>Major Functions</h3><ul><li>User registration and login</li><li>Product creation and update</li><li>Category-wise inventory organization</li><li>Search and filter operations</li><li>Stock-in, stock-out, and adjustment recording</li><li>Low-stock and out-of-stock monitoring</li><li>Recent movement history and inventory value display</li></ul></div><div class='section'><h3>Function Summary</h3><p>These functions together create a compact but practical inventory workflow suitable for both academic demonstration and small-scale operational use.</p></div>
+  </main>
+  <footer class="page-footer">Page 13</footer>
+</section>
 
-        <h2>Theory</h2>
-        <p>
-          A Software Requirements Specification is the formal foundation of a software
-          project. It defines what the system must do, who will use it, the environment
-          in which it will operate, the quality standards it must maintain, and the
-          assumptions under which development will proceed. A clear SRS reduces ambiguity,
-          prevents scope drift, and gives developers, testers, and stakeholders a shared
-          understanding of expected behavior.
-        </p>
-        <p>
-          For an inventory management system, the SRS is especially important because stock
-          accuracy, movement history, supplier tracking, and replenishment awareness all
-          depend on consistent workflows and reliable data handling.
-        </p>
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-01</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>User Classes and Characteristics</h2>
+    <table><thead><tr><th>User Class</th><th>Characteristics</th><th>System Need</th></tr></thead><tbody><tr><td>Admin</td><td>Higher control, responsible for overview and configuration</td><td>Access to dashboard, product updates, and movement operations</td></tr><tr><td>Staff</td><td>Operational user focused on routine activity</td><td>Fast stock logging and clear product lookup</td></tr></tbody></table><div class='section'><h3>Interpretation</h3><p>The user model remains deliberately simple so the project stays focused. Even with only two classes, responsibility boundaries are visible and useful for design and testing.</p><p>A future enhancement could add a manager role for analytics without full administrative permissions.</p></div>
+  </main>
+  <footer class="page-footer">Page 14</footer>
+</section>
 
-        <h2>Problem Statement</h2>
-        <p>
-          Traditional inventory processes often rely on spreadsheets or manual registers.
-          This leads to duplicate entries, delayed updates, missed reorder cycles, and
-          poor visibility into stock movement. Teams struggle to answer basic operational
-          questions such as what is available, what is running low, what has moved today,
-          and what the current inventory value is.
-        </p>
-        <p>
-          The proposed Inventory Management System addresses these issues by providing a
-          centralized digital platform where authorized users can log in, manage products,
-          organize items by category, record stock-in and stock-out transactions, monitor
-          low-stock alerts, and review recent movement activity in real time.
-        </p>
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-01</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Operating Environment</h2>
+    <table><thead><tr><th>Aspect</th><th>Description</th></tr></thead><tbody><tr><td>Platform</td><td>Web-based application</td></tr><tr><td>Client</td><td>Modern browser</td></tr><tr><td>Frontend Runtime</td><td>React and built static assets</td></tr><tr><td>Backend Runtime</td><td>Node.js with Express</td></tr><tr><td>Database</td><td>MongoDB Atlas or local Mongo instance</td></tr><tr><td>Deployment</td><td>Render-ready production setup</td></tr></tbody></table><div class='section'><h3>Environment Note</h3><p>The operating environment is intentionally mainstream so the project remains portable, teachable, and easy to review.</p></div>
+  </main>
+  <footer class="page-footer">Page 15</footer>
+</section>
 
-        <div class="section-label">Software Requirements Specification</div>
-        <h3>1. Introduction</h3>
-        <p><strong>1.1 Purpose:</strong> To describe the functional and non-functional requirements of the Inventory Management System.</p>
-        <p><strong>1.2 Scope:</strong> The system is a web application for maintaining product records, stock counts, supplier details, locations, and movement logs.</p>
-        <p><strong>1.3 Definitions:</strong> SRS - Software Requirements Specification, UI - User Interface, API - Application Programming Interface, JWT - JSON Web Token, CRUD - Create Read Update Delete.</p>
-        <p><strong>1.4 Overview:</strong> This document covers system description, features, constraints, interfaces, planning artifacts, metrics, and cost estimation.</p>
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-01</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Design Constraints and Assumptions</h2>
+    <div class='section'><h3>Design Constraints</h3><ul><li>The interface must remain readable and responsive across common desktop and mobile widths.</li><li>Authentication must protect API routes from unauthorized access.</li><li>Invalid stock movements must be rejected before quantity corruption occurs.</li><li>The project must remain simple enough for academic submission and explanation.</li></ul></div><div class='section'><h3>Assumptions and Dependencies</h3><ul><li>Users provide correct stock details and movement quantities.</li><li>The deployment environment provides Node.js support.</li><li>MongoDB connectivity is available in normal MERN mode.</li><li>For local demonstration, a stable demo runtime may be used when database setup is unavailable.</li></ul></div>
+  </main>
+  <footer class="page-footer">Page 16</footer>
+</section>
 
-        <h3>2. Overall Description</h3>
-        <p><strong>2.1 Product Perspective:</strong> The application follows a client-server architecture where the React frontend communicates with an Express API, which in turn persists data in MongoDB.</p>
-        <p><strong>2.2 Product Functions:</strong> User authentication, category management, product creation, stock editing, movement logging, dashboard insights, and low-stock monitoring.</p>
-        <p><strong>2.3 User Classes:</strong> Admin users manage products and operational settings; staff users update stock entries and observe inventory status.</p>
-        <p><strong>2.4 Operating Environment:</strong> Web browsers on Windows, Linux, and macOS; Node.js server runtime; MongoDB database server.</p>
-        <p><strong>2.5 Constraints:</strong> Stable network access is required, JWT secrets must be protected, and MongoDB must be reachable for persistent storage.</p>
-        <p><strong>2.6 Assumptions:</strong> Users enter accurate stock data, supplier information is known, and the organization follows defined stock workflows.</p>
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-01</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Functional Requirements: Authentication</h2>
+    <table><thead><tr><th>Requirement ID</th><th>Requirement</th></tr></thead><tbody><tr><td>FR-01</td><td>The system shall allow users to create an account using name, email, and password.</td></tr><tr><td>FR-02</td><td>The system shall validate user credentials during login.</td></tr><tr><td>FR-03</td><td>The system shall return an authenticated session token after successful login.</td></tr><tr><td>FR-04</td><td>The system shall protect inventory and dashboard routes from anonymous access.</td></tr></tbody></table>
+  </main>
+  <footer class="page-footer">Page 17</footer>
+</section>
 
-        <h3>3. Functional Requirements</h3>
-        <ul>
-          <li>The system shall allow users to register and log in securely.</li>
-          <li>The system shall allow authorized users to create and update product records.</li>
-          <li>The system shall organize products by category, supplier, and storage location.</li>
-          <li>The system shall record stock-in, stock-out, and adjustment movements.</li>
-          <li>The system shall recalculate product stock status after each movement.</li>
-          <li>The system shall display low-stock and out-of-stock conditions on the dashboard.</li>
-          <li>The system shall show inventory value based on quantity and unit cost.</li>
-          <li>The system shall provide recent movement history for traceability.</li>
-        </ul>
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-01</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Functional Requirements: Catalog Management</h2>
+    <table><thead><tr><th>Requirement ID</th><th>Requirement</th></tr></thead><tbody><tr><td>FR-05</td><td>The system shall allow authorized users to create product records.</td></tr><tr><td>FR-06</td><td>The system shall ensure SKU uniqueness.</td></tr><tr><td>FR-07</td><td>The system shall allow updating of existing product records.</td></tr><tr><td>FR-08</td><td>The system shall store category, supplier, location, quantity, and pricing data for each product.</td></tr></tbody></table>
+  </main>
+  <footer class="page-footer">Page 18</footer>
+</section>
 
-        <h3>4. Non-Functional Requirements</h3>
-        <ul>
-          <li>Performance: dashboard and list views should respond quickly for normal warehouse usage.</li>
-          <li>Security: authentication must use password hashing and token-based authorization.</li>
-          <li>Usability: the UI should be responsive, soft-toned, and easy to navigate.</li>
-          <li>Maintainability: frontend and backend modules should be separated cleanly.</li>
-          <li>Scalability: the data model should support expansion to more products and categories.</li>
-        </ul>
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-01</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Functional Requirements: Stock Movement</h2>
+    <table><thead><tr><th>Requirement ID</th><th>Requirement</th></tr></thead><tbody><tr><td>FR-09</td><td>The system shall support stock-in, stock-out, and adjustment transactions.</td></tr><tr><td>FR-10</td><td>The system shall recalculate quantity and stock status after each valid movement.</td></tr><tr><td>FR-11</td><td>The system shall reject stock-out operations when requested quantity exceeds available stock.</td></tr><tr><td>FR-12</td><td>The system shall store movement history including reference and note.</td></tr></tbody></table>
+  </main>
+  <footer class="page-footer">Page 19</footer>
+</section>
 
-        <h3>5. External Interface Requirements</h3>
-        <ul>
-          <li>User Interface: responsive React screens for login, dashboard, and inventory operations.</li>
-          <li>Software Interface: REST API endpoints built in Express.</li>
-          <li>Database Interface: MongoDB collections for users, categories, products, and stock movements.</li>
-          <li>Communication Interface: HTTP/JSON between client and server.</li>
-        </ul>
-      </section>
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-01</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Functional Requirements: Dashboard and Reporting</h2>
+    <table><thead><tr><th>Requirement ID</th><th>Requirement</th></tr></thead><tbody><tr><td>FR-13</td><td>The system shall compute total inventory value.</td></tr><tr><td>FR-14</td><td>The system shall list low-stock and out-of-stock items.</td></tr><tr><td>FR-15</td><td>The system shall display recent stock activity in reverse chronological order.</td></tr><tr><td>FR-16</td><td>The system shall provide category-wise inventory distribution.</td></tr></tbody></table>
+  </main>
+  <footer class="page-footer">Page 20</footer>
+</section>
 
-      <section class="page page-break">
-        <p class="eyebrow">Experiment-01</p>
-        <h2>Diagrams</h2>
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-01</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Non-Functional Requirements</h2>
+    <div class='section'><h3>Quality Requirements</h3><ul><li>Performance: normal interactions should be completed quickly under regular workload.</li><li>Security: credentials and protected routes must be handled securely.</li><li>Usability: forms and tables must remain readable and manageable.</li><li>Maintainability: backend and frontend code should remain modular.</li><li>Portability: the application should run in modern browser and Node environments.</li></ul></div><div class='section'><h3>Interpretation</h3><p>The non-functional requirements ensure that the system is not only feature-complete but also practical, maintainable, and reviewable.</p></div>
+  </main>
+  <footer class="page-footer">Page 21</footer>
+</section>
 
-        <h3>Use Case Diagram</h3>
-        <div class="diagram">
-          <svg viewBox="0 0 860 320" xmlns="http://www.w3.org/2000/svg">
-            <rect x="250" y="24" width="390" height="270" rx="22" fill="#fff" stroke="#cfc6ba"/>
-            <text x="445" y="48" text-anchor="middle" font-size="18" font-family="Georgia">Inventory Management System</text>
-            <circle cx="90" cy="95" r="18" fill="#d8e4d5" stroke="#a9b5a4"/>
-            <line x1="90" y1="113" x2="90" y2="165" stroke="#70675f"/>
-            <line x1="65" y1="130" x2="115" y2="130" stroke="#70675f"/>
-            <line x1="90" y1="165" x2="65" y2="195" stroke="#70675f"/>
-            <line x1="90" y1="165" x2="115" y2="195" stroke="#70675f"/>
-            <text x="90" y="220" text-anchor="middle" font-size="15">Admin</text>
-            <circle cx="760" cy="95" r="18" fill="#dae8ef" stroke="#9ab0bc"/>
-            <line x1="760" y1="113" x2="760" y2="165" stroke="#70675f"/>
-            <line x1="735" y1="130" x2="785" y2="130" stroke="#70675f"/>
-            <line x1="760" y1="165" x2="735" y2="195" stroke="#70675f"/>
-            <line x1="760" y1="165" x2="785" y2="195" stroke="#70675f"/>
-            <text x="760" y="220" text-anchor="middle" font-size="15">Staff</text>
-            <ellipse cx="445" cy="92" rx="96" ry="26" fill="#f5ddd0" stroke="#c79f87"/>
-            <text x="445" y="98" text-anchor="middle" font-size="14">Authenticate User</text>
-            <ellipse cx="445" cy="145" rx="106" ry="26" fill="#d8e4d5" stroke="#9fae9b"/>
-            <text x="445" y="151" text-anchor="middle" font-size="14">Manage Products</text>
-            <ellipse cx="445" cy="198" rx="118" ry="26" fill="#dae8ef" stroke="#98afba"/>
-            <text x="445" y="204" text-anchor="middle" font-size="14">Record Stock Movement</text>
-            <ellipse cx="445" cy="251" rx="100" ry="26" fill="#ece0cf" stroke="#b7aa96"/>
-            <text x="445" y="257" text-anchor="middle" font-size="14">View Dashboard</text>
-            <line x1="108" y1="95" x2="349" y2="92" stroke="#7f7569"/>
-            <line x1="108" y1="130" x2="339" y2="145" stroke="#7f7569"/>
-            <line x1="108" y1="165" x2="327" y2="198" stroke="#7f7569"/>
-            <line x1="742" y1="95" x2="541" y2="92" stroke="#7f7569"/>
-            <line x1="742" y1="130" x2="551" y2="198" stroke="#7f7569"/>
-            <line x1="742" y1="165" x2="545" y2="251" stroke="#7f7569"/>
-          </svg>
-        </div>
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-01</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>External Interface Requirements</h2>
+    <div class='section'><h3>User Interface Requirements</h3><ul><li>The login screen shall provide clear entry for email and password.</li><li>The dashboard shall present summary cards and activity without clutter.</li><li>The inventory screen shall provide search, filters, forms, and movement logging.</li><li>The interface shall remain consistent across desktop and mobile layouts.</li></ul></div><div class='section'><h3>Software and Communication Interfaces</h3><ul><li>Frontend communicates with backend using JSON over HTTP.</li><li>Backend communicates with MongoDB using Mongoose in MERN mode.</li><li>Render deployment serves the built frontend and backend from one service.</li></ul></div>
+  </main>
+  <footer class="page-footer">Page 22</footer>
+</section>
 
-        <h3>Class Diagram</h3>
-        <div class="diagram">
-          <svg viewBox="0 0 860 360" xmlns="http://www.w3.org/2000/svg">
-            <rect x="32" y="40" width="180" height="160" rx="12" fill="#fff" stroke="#cfc6ba"/>
-            <text x="122" y="66" text-anchor="middle" font-size="18">User</text>
-            <line x1="32" y1="78" x2="212" y2="78" stroke="#cfc6ba"/>
-            <text x="46" y="102" font-size="13">name</text>
-            <text x="46" y="123" font-size="13">email</text>
-            <text x="46" y="144" font-size="13">password</text>
-            <text x="46" y="165" font-size="13">role</text>
-            <rect x="252" y="40" width="180" height="160" rx="12" fill="#fff" stroke="#cfc6ba"/>
-            <text x="342" y="66" text-anchor="middle" font-size="18">Category</text>
-            <line x1="252" y1="78" x2="432" y2="78" stroke="#cfc6ba"/>
-            <text x="266" y="102" font-size="13">name</text>
-            <text x="266" y="123" font-size="13">slug</text>
-            <text x="266" y="144" font-size="13">accentColor</text>
-            <rect x="472" y="40" width="180" height="220" rx="12" fill="#fff" stroke="#cfc6ba"/>
-            <text x="562" y="66" text-anchor="middle" font-size="18">Product</text>
-            <line x1="472" y1="78" x2="652" y2="78" stroke="#cfc6ba"/>
-            <text x="486" y="102" font-size="13">name, sku</text>
-            <text x="486" y="123" font-size="13">supplier, location</text>
-            <text x="486" y="144" font-size="13">quantity, reorderLevel</text>
-            <text x="486" y="165" font-size="13">unitCost, unitPrice</text>
-            <text x="486" y="186" font-size="13">status</text>
-            <text x="486" y="207" font-size="13">lastMovementAt</text>
-            <rect x="692" y="40" width="136" height="220" rx="12" fill="#fff" stroke="#cfc6ba"/>
-            <text x="760" y="66" text-anchor="middle" font-size="18">StockMovement</text>
-            <line x1="692" y1="78" x2="828" y2="78" stroke="#cfc6ba"/>
-            <text x="706" y="102" font-size="13">type</text>
-            <text x="706" y="123" font-size="13">quantity</text>
-            <text x="706" y="144" font-size="13">note</text>
-            <text x="706" y="165" font-size="13">reference</text>
-            <text x="706" y="186" font-size="13">previousQuantity</text>
-            <text x="706" y="207" font-size="13">newQuantity</text>
-            <line x1="212" y1="120" x2="252" y2="120" stroke="#8f857a" stroke-width="2"/>
-            <line x1="432" y1="120" x2="472" y2="120" stroke="#8f857a" stroke-width="2"/>
-            <line x1="652" y1="150" x2="692" y2="150" stroke="#8f857a" stroke-width="2"/>
-          </svg>
-        </div>
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-01</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Data Dictionary</h2>
+    <table><thead><tr><th>Entity</th><th>Key Attributes</th><th>Purpose</th></tr></thead><tbody><tr><td>User</td><td>id, name, email, role</td><td>Access control and action ownership</td></tr><tr><td>Category</td><td>name, slug, accentColor</td><td>Grouping and display segmentation</td></tr><tr><td>Product</td><td>name, sku, quantity, reorderLevel, supplier, location</td><td>Core inventory record</td></tr><tr><td>StockMovement</td><td>type, quantity, previousQuantity, newQuantity</td><td>Historical stock trace</td></tr></tbody></table><div class='section'><h3>Business Rule Note</h3><p>The business rules around product and movement data are intentionally strict because inventory accuracy depends on them.</p></div>
+  </main>
+  <footer class="page-footer">Page 23</footer>
+</section>
 
-        <h3>Activity Diagram</h3>
-        <div class="diagram">
-          <svg viewBox="0 0 860 240" xmlns="http://www.w3.org/2000/svg">
-            <ellipse cx="86" cy="120" rx="42" ry="24" fill="#d8e4d5" stroke="#a4b09d"/>
-            <text x="86" y="126" text-anchor="middle" font-size="14">Start</text>
-            <rect x="160" y="92" width="120" height="56" rx="12" fill="#fff" stroke="#cfc6ba"/>
-            <text x="220" y="125" text-anchor="middle" font-size="14">Login</text>
-            <rect x="328" y="92" width="150" height="56" rx="12" fill="#fff" stroke="#cfc6ba"/>
-            <text x="403" y="125" text-anchor="middle" font-size="14">Select Product</text>
-            <rect x="520" y="92" width="160" height="56" rx="12" fill="#fff" stroke="#cfc6ba"/>
-            <text x="600" y="125" text-anchor="middle" font-size="14">Record Movement</text>
-            <rect x="716" y="92" width="108" height="56" rx="12" fill="#fff" stroke="#cfc6ba"/>
-            <text x="770" y="125" text-anchor="middle" font-size="14">Update Stock</text>
-            <line x1="128" y1="120" x2="160" y2="120" stroke="#80766b" stroke-width="2"/>
-            <line x1="280" y1="120" x2="328" y2="120" stroke="#80766b" stroke-width="2"/>
-            <line x1="478" y1="120" x2="520" y2="120" stroke="#80766b" stroke-width="2"/>
-            <line x1="680" y1="120" x2="716" y2="120" stroke="#80766b" stroke-width="2"/>
-          </svg>
-        </div>
-      </section>
- 
-      <section class="page page-break">
-        <p class="eyebrow">Experiment-01</p>
-        <h2>Additional Architecture Diagrams</h2>
+        <section class="page">
+          <header class="page-header">
+            <div>Experiment-01</div>
+            <div>Inventory Management System</div>
+          </header>
+          <main class="page-body">
+            <h2>Use Case Diagram</h2>
+            <div class='diagram-block'><h4>Use Case Diagram</h4>
+<svg viewBox="0 0 760 260" xmlns="http://www.w3.org/2000/svg">
+  <rect x="210" y="22" width="340" height="214" fill="#fff" stroke="#000" stroke-width="1.4"/>
+  <text x="380" y="42" text-anchor="middle" font-size="16">Inventory Management System</text>
+  <circle cx="70" cy="86" r="16" fill="#f8f8f8" stroke="#000"/>
+  <line x1="70" y1="102" x2="70" y2="144" stroke="#000"/>
+  <line x1="48" y1="117" x2="92" y2="117" stroke="#000"/>
+  <line x1="70" y1="144" x2="50" y2="171" stroke="#000"/>
+  <line x1="70" y1="144" x2="90" y2="171" stroke="#000"/>
+  <text x="70" y="192" text-anchor="middle" font-size="13">Admin</text>
+  <circle cx="690" cy="86" r="16" fill="#f8f8f8" stroke="#000"/>
+  <line x1="690" y1="102" x2="690" y2="144" stroke="#000"/>
+  <line x1="668" y1="117" x2="712" y2="117" stroke="#000"/>
+  <line x1="690" y1="144" x2="670" y2="171" stroke="#000"/>
+  <line x1="690" y1="144" x2="710" y2="171" stroke="#000"/>
+  <text x="690" y="192" text-anchor="middle" font-size="13">Staff</text>
+  <ellipse cx="380" cy="76" rx="86" ry="22" fill="#fafafa" stroke="#000"/>
+  <text x="380" y="81" text-anchor="middle" font-size="13">Authenticate User</text>
+  <ellipse cx="380" cy="116" rx="98" ry="22" fill="#fafafa" stroke="#000"/>
+  <text x="380" y="121" text-anchor="middle" font-size="13">Manage Product Catalog</text>
+  <ellipse cx="380" cy="156" rx="102" ry="22" fill="#fafafa" stroke="#000"/>
+  <text x="380" y="161" text-anchor="middle" font-size="13">Record Stock Movement</text>
+  <ellipse cx="380" cy="196" rx="84" ry="22" fill="#fafafa" stroke="#000"/>
+  <text x="380" y="201" text-anchor="middle" font-size="13">View Dashboard</text>
+  <line x1="86" y1="86" x2="294" y2="76" stroke="#000"/>
+  <line x1="90" y1="116" x2="282" y2="116" stroke="#000"/>
+  <line x1="90" y1="144" x2="278" y2="156" stroke="#000"/>
+  <line x1="674" y1="86" x2="466" y2="76" stroke="#000"/>
+  <line x1="670" y1="118" x2="482" y2="156" stroke="#000"/>
+  <line x1="670" y1="145" x2="464" y2="196" stroke="#000"/>
+</svg>
+</div><p>The use case diagram identifies the two main actors: Admin and Staff. Admin participates in all four central use cases, while Staff interacts mainly with authentication, stock movement, and dashboard viewing.</p><p>This diagram helps clarify functional scope at a glance and ensures that implementation remains aligned with expected user interactions.</p>
+          </main>
+          <footer class="page-footer">Page 24</footer>
+        </section>
 
-        <h3>Sequence Diagram</h3>
-        <div class="diagram">
-          <svg viewBox="0 0 860 300" xmlns="http://www.w3.org/2000/svg">
-            <text x="110" y="34" text-anchor="middle" font-size="16">User</text>
-            <text x="320" y="34" text-anchor="middle" font-size="16">React UI</text>
-            <text x="540" y="34" text-anchor="middle" font-size="16">Express API</text>
-            <text x="750" y="34" text-anchor="middle" font-size="16">MongoDB</text>
-            <line x1="110" y1="50" x2="110" y2="270" stroke="#9a9187" stroke-dasharray="6 6"/>
-            <line x1="320" y1="50" x2="320" y2="270" stroke="#9a9187" stroke-dasharray="6 6"/>
-            <line x1="540" y1="50" x2="540" y2="270" stroke="#9a9187" stroke-dasharray="6 6"/>
-            <line x1="750" y1="50" x2="750" y2="270" stroke="#9a9187" stroke-dasharray="6 6"/>
-            <line x1="120" y1="82" x2="310" y2="82" stroke="#7c7368" stroke-width="2"/>
-            <text x="214" y="72" text-anchor="middle" font-size="13">submit login</text>
-            <line x1="330" y1="116" x2="530" y2="116" stroke="#7c7368" stroke-width="2"/>
-            <text x="430" y="106" text-anchor="middle" font-size="13">POST /auth/login</text>
-            <line x1="550" y1="150" x2="740" y2="150" stroke="#7c7368" stroke-width="2"/>
-            <text x="646" y="140" text-anchor="middle" font-size="13">verify user</text>
-            <line x1="740" y1="184" x2="550" y2="184" stroke="#7c7368" stroke-width="2"/>
-            <text x="646" y="174" text-anchor="middle" font-size="13">user document</text>
-            <line x1="530" y1="218" x2="330" y2="218" stroke="#7c7368" stroke-width="2"/>
-            <text x="430" y="208" text-anchor="middle" font-size="13">JWT + profile</text>
-            <line x1="310" y1="252" x2="120" y2="252" stroke="#7c7368" stroke-width="2"/>
-            <text x="214" y="242" text-anchor="middle" font-size="13">dashboard access</text>
-          </svg>
-        </div>
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-01</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Use Case Diagram Explanation</h2>
+    <div class='section'><h3>Discussion</h3><p>Use Case Interpretation is an important part of the Inventory Management System because it directly affects actor responsibilities and system boundaries. In an academic software project, this area must be documented clearly so the reviewer can understand why the chosen design and planning decisions are reasonable.</p><p>The project approaches use case interpretation through a practical MERN perspective. Instead of treating the subject as an isolated theory topic, the report connects it with inventory tasks such as product registration, quantity tracking, stock validation, dashboard reporting, and role-based usage.</p><p>From a management angle, use case interpretation influences scope stability, implementation order, testing effort, and maintenance readiness. Therefore it deserves dedicated space in the report rather than being merged into a short summary.</p></div><div class='section'><h3>Key Points</h3><ul><li>Admin needs control over both product structure and stock state.</li><li>Staff needs a shorter path to operational updates and monitoring.</li><li>The system boundary prevents actors from interacting with persistence directly.</li><li>Each use case is intentionally broad enough to represent a real working task.</li></ul></div><div class='section'><h3>Observation</h3><p>The discussion of use case interpretation shows that the project is not only about writing code. It also requires deliberate control over actor responsibilities and system boundaries so the implemented system remains correct, understandable, and suitable for academic evaluation.</p></div>
+  </main>
+  <footer class="page-footer">Page 25</footer>
+</section>
 
-        <h3>Component Diagram</h3>
-        <div class="diagram">
-          <svg viewBox="0 0 860 220" xmlns="http://www.w3.org/2000/svg">
-            <rect x="28" y="50" width="180" height="90" rx="16" fill="#dae8ef" stroke="#98afba"/>
-            <text x="118" y="92" text-anchor="middle" font-size="18">React Frontend</text>
-            <text x="118" y="116" text-anchor="middle" font-size="13">Login, Dashboard, Inventory</text>
-            <rect x="338" y="50" width="180" height="90" rx="16" fill="#d8e4d5" stroke="#9fae9b"/>
-            <text x="428" y="92" text-anchor="middle" font-size="18">Express Backend</text>
-            <text x="428" y="116" text-anchor="middle" font-size="13">Auth, Product, Movement APIs</text>
-            <rect x="648" y="50" width="180" height="90" rx="16" fill="#f5ddd0" stroke="#c79f87"/>
-            <text x="738" y="92" text-anchor="middle" font-size="18">MongoDB</text>
-            <text x="738" y="116" text-anchor="middle" font-size="13">Users, Categories, Products</text>
-            <line x1="208" y1="95" x2="338" y2="95" stroke="#7c7368" stroke-width="3"/>
-            <line x1="518" y1="95" x2="648" y2="95" stroke="#7c7368" stroke-width="3"/>
-          </svg>
-        </div>
+        <section class="page">
+          <header class="page-header">
+            <div>Experiment-01</div>
+            <div>Inventory Management System</div>
+          </header>
+          <main class="page-body">
+            <h2>Class Diagram</h2>
+            <div class='diagram-block'><h4>Class Diagram</h4>
+<svg viewBox="0 0 760 280" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="42" width="160" height="138" fill="#fff" stroke="#000"/>
+  <text x="100" y="63" text-anchor="middle" font-size="15">User</text>
+  <line x1="20" y1="72" x2="180" y2="72" stroke="#000"/>
+  <text x="30" y="94" font-size="12">id, name, email</text>
+  <text x="30" y="114" font-size="12">password, role</text>
+  <rect x="220" y="42" width="160" height="108" fill="#fff" stroke="#000"/>
+  <text x="300" y="63" text-anchor="middle" font-size="15">Category</text>
+  <line x1="220" y1="72" x2="380" y2="72" stroke="#000"/>
+  <text x="230" y="94" font-size="12">id, name, slug</text>
+  <text x="230" y="114" font-size="12">accentColor</text>
+  <rect x="420" y="22" width="172" height="190" fill="#fff" stroke="#000"/>
+  <text x="506" y="44" text-anchor="middle" font-size="15">Product</text>
+  <line x1="420" y1="54" x2="592" y2="54" stroke="#000"/>
+  <text x="430" y="76" font-size="12">name, sku, description</text>
+  <text x="430" y="96" font-size="12">category, supplier, location</text>
+  <text x="430" y="116" font-size="12">quantity, reorderLevel</text>
+  <text x="430" y="136" font-size="12">unitCost, unitPrice</text>
+  <text x="430" y="156" font-size="12">status, updatedAt</text>
+  <rect x="620" y="32" width="120" height="180" fill="#fff" stroke="#000"/>
+  <text x="680" y="54" text-anchor="middle" font-size="15">StockMovement</text>
+  <line x1="620" y1="64" x2="740" y2="64" stroke="#000"/>
+  <text x="630" y="86" font-size="12">type, quantity</text>
+  <text x="630" y="106" font-size="12">note, reference</text>
+  <text x="630" y="126" font-size="12">previousQuantity</text>
+  <text x="630" y="146" font-size="12">newQuantity</text>
+  <text x="630" y="166" font-size="12">performedBy</text>
+  <line x1="180" y1="96" x2="220" y2="96" stroke="#000" stroke-width="1.4"/>
+  <line x1="380" y1="96" x2="420" y2="96" stroke="#000" stroke-width="1.4"/>
+  <line x1="592" y1="126" x2="620" y2="126" stroke="#000" stroke-width="1.4"/>
+</svg>
+</div><p>The class diagram captures the static structure of the application. Product is the domain center, Category supports grouping, User supports accountability, and StockMovement supports traceability.</p><p>This model guided both the backend schema design and the frontend assumption about how data objects are related when displayed in forms, tables, and summaries.</p>
+          </main>
+          <footer class="page-footer">Page 26</footer>
+        </section>
 
-        <h3>Deployment Diagram</h3>
-        <div class="diagram">
-          <svg viewBox="0 0 860 220" xmlns="http://www.w3.org/2000/svg">
-            <rect x="34" y="48" width="190" height="120" rx="16" fill="#ece0cf" stroke="#b7aa96"/>
-            <text x="129" y="92" text-anchor="middle" font-size="18">Client Device</text>
-            <text x="129" y="118" text-anchor="middle" font-size="13">Browser</text>
-            <rect x="334" y="48" width="190" height="120" rx="16" fill="#d8e4d5" stroke="#9fae9b"/>
-            <text x="429" y="92" text-anchor="middle" font-size="18">Application Server</text>
-            <text x="429" y="118" text-anchor="middle" font-size="13">Node.js + Express API</text>
-            <rect x="636" y="48" width="190" height="120" rx="16" fill="#dae8ef" stroke="#98afba"/>
-            <text x="731" y="92" text-anchor="middle" font-size="18">Database Server</text>
-            <text x="731" y="118" text-anchor="middle" font-size="13">MongoDB instance</text>
-            <line x1="224" y1="108" x2="334" y2="108" stroke="#7c7368" stroke-width="3"/>
-            <line x1="524" y1="108" x2="636" y2="108" stroke="#7c7368" stroke-width="3"/>
-          </svg>
-        </div>
-      </section>
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-01</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Class Diagram Explanation</h2>
+    <div class='section'><h3>Discussion</h3><p>Class Relationships is an important part of the Inventory Management System because it directly affects structural clarity and maintainability. In an academic software project, this area must be documented clearly so the reviewer can understand why the chosen design and planning decisions are reasonable.</p><p>The project approaches class relationships through a practical MERN perspective. Instead of treating the subject as an isolated theory topic, the report connects it with inventory tasks such as product registration, quantity tracking, stock validation, dashboard reporting, and role-based usage.</p><p>From a management angle, class relationships influences scope stability, implementation order, testing effort, and maintenance readiness. Therefore it deserves dedicated space in the report rather than being merged into a short summary.</p></div><div class='section'><h3>Key Points</h3><ul><li>User-to-movement association supports responsibility tracking.</li><li>Category-to-product association supports filtering and display grouping.</li><li>Product-to-movement association supports change history.</li><li>Clear entity separation improves controller and route organization.</li></ul></div><div class='section'><h3>Observation</h3><p>The discussion of class relationships shows that the project is not only about writing code. It also requires deliberate control over structural clarity and maintainability so the implemented system remains correct, understandable, and suitable for academic evaluation.</p></div>
+  </main>
+  <footer class="page-footer">Page 27</footer>
+</section>
 
-      <section class="page page-break">
-        <p class="eyebrow">Experiment-02</p>
-        <h2>Work Breakdown Structure</h2>
-        <p>
-          The WBS decomposes the project into manageable tasks so planning, ownership, and
-          progress tracking remain clear.
-        </p>
-        <table>
-          <thead>
-            <tr>
-              <th>WBS ID</th>
-              <th>Task</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>1.0</td><td>Requirement Analysis</td><td>Define problem statement, objectives, and user needs.</td></tr>
-            <tr><td>2.0</td><td>System Design</td><td>Prepare data model, API design, and UI wireflow.</td></tr>
-            <tr><td>3.0</td><td>Backend Development</td><td>Create models, routes, middleware, and authentication.</td></tr>
-            <tr><td>4.0</td><td>Frontend Development</td><td>Build React screens, forms, dashboard, and navigation.</td></tr>
-            <tr><td>5.0</td><td>Database Integration</td><td>Connect MongoDB and validate CRUD and stock movement flows.</td></tr>
-            <tr><td>6.0</td><td>Testing</td><td>Check usability, stock calculations, and route correctness.</td></tr>
-            <tr><td>7.0</td><td>Deployment Preparation</td><td>Configure environment variables, scripts, and documentation.</td></tr>
-          </tbody>
-        </table>
+        <section class="page">
+          <header class="page-header">
+            <div>Experiment-01</div>
+            <div>Inventory Management System</div>
+          </header>
+          <main class="page-body">
+            <h2>Activity Diagram</h2>
+            <div class='diagram-block'><h4>Activity Diagram</h4>
+<svg viewBox="0 0 760 190" xmlns="http://www.w3.org/2000/svg">
+  <ellipse cx="60" cy="95" rx="30" ry="18" fill="#fafafa" stroke="#000"/>
+  <text x="60" y="100" text-anchor="middle" font-size="12">Start</text>
+  <rect x="120" y="72" width="96" height="46" fill="#fff" stroke="#000"/>
+  <text x="168" y="100" text-anchor="middle" font-size="12">Login</text>
+  <rect x="270" y="72" width="120" height="46" fill="#fff" stroke="#000"/>
+  <text x="330" y="100" text-anchor="middle" font-size="12">Select Product</text>
+  <rect x="438" y="72" width="126" height="46" fill="#fff" stroke="#000"/>
+  <text x="501" y="100" text-anchor="middle" font-size="12">Record Movement</text>
+  <rect x="618" y="72" width="110" height="46" fill="#fff" stroke="#000"/>
+  <text x="673" y="100" text-anchor="middle" font-size="12">Update Stock</text>
+  <line x1="90" y1="95" x2="120" y2="95" stroke="#000" stroke-width="1.4"/>
+  <line x1="216" y1="95" x2="270" y2="95" stroke="#000" stroke-width="1.4"/>
+  <line x1="390" y1="95" x2="438" y2="95" stroke="#000" stroke-width="1.4"/>
+  <line x1="564" y1="95" x2="618" y2="95" stroke="#000" stroke-width="1.4"/>
+</svg>
+</div><p>The activity diagram presents a simplified operational flow from login to stock update.</p><p>It is useful because it highlights sequence rather than structure, making warehouse-style task flow easier to explain to non-programmer reviewers.</p>
+          </main>
+          <footer class="page-footer">Page 28</footer>
+        </section>
 
-        <p class="eyebrow">Experiment-03</p>
-        <h2>Gantt Chart</h2>
-        <div class="gantt">
-          <div class="head">Task</div><div class="head">W1</div><div class="head">W2</div><div class="head">W3</div><div class="head">W4</div><div class="head">W5</div><div class="head">W6</div><div class="head">W7</div><div class="head">W8</div>
-          <div>Requirement gathering</div><div class="bar-sage"></div><div class="bar-sage"></div><div></div><div></div><div></div><div></div><div></div><div></div>
-          <div>Architecture and schema design</div><div></div><div class="bar-sky"></div><div class="bar-sky"></div><div></div><div></div><div></div><div></div><div></div>
-          <div>Backend development</div><div></div><div></div><div class="bar-peach"></div><div class="bar-peach"></div><div class="bar-peach"></div><div></div><div></div><div></div>
-          <div>Frontend development</div><div></div><div></div><div></div><div class="bar-sage"></div><div class="bar-sage"></div><div class="bar-sage"></div><div></div><div></div>
-          <div>Integration and fixes</div><div></div><div></div><div></div><div></div><div class="bar-sky"></div><div class="bar-sky"></div><div></div><div></div>
-          <div>Testing and documentation</div><div></div><div></div><div></div><div></div><div></div><div class="bar-peach"></div><div class="bar-peach"></div><div class="bar-peach"></div>
-        </div>
-      </section>
+        <section class="page">
+          <header class="page-header">
+            <div>Experiment-01</div>
+            <div>Inventory Management System</div>
+          </header>
+          <main class="page-body">
+            <h2>Sequence Diagram</h2>
+            <div class='diagram-block'><h4>Sequence Diagram</h4>
+<svg viewBox="0 0 760 250" xmlns="http://www.w3.org/2000/svg">
+  <text x="80" y="24" text-anchor="middle" font-size="13">User</text>
+  <text x="250" y="24" text-anchor="middle" font-size="13">React UI</text>
+  <text x="460" y="24" text-anchor="middle" font-size="13">Express API</text>
+  <text x="660" y="24" text-anchor="middle" font-size="13">DB Layer</text>
+  <line x1="80" y1="34" x2="80" y2="220" stroke="#000" stroke-dasharray="5,5"/>
+  <line x1="250" y1="34" x2="250" y2="220" stroke="#000" stroke-dasharray="5,5"/>
+  <line x1="460" y1="34" x2="460" y2="220" stroke="#000" stroke-dasharray="5,5"/>
+  <line x1="660" y1="34" x2="660" y2="220" stroke="#000" stroke-dasharray="5,5"/>
+  <line x1="90" y1="68" x2="240" y2="68" stroke="#000"/><text x="165" y="58" text-anchor="middle" font-size="11">Login request</text>
+  <line x1="260" y1="104" x2="450" y2="104" stroke="#000"/><text x="355" y="94" text-anchor="middle" font-size="11">POST /auth/login</text>
+  <line x1="470" y1="140" x2="650" y2="140" stroke="#000"/><text x="560" y="130" text-anchor="middle" font-size="11">Validate and fetch records</text>
+  <line x1="650" y1="176" x2="470" y2="176" stroke="#000"/><text x="560" y="166" text-anchor="middle" font-size="11">Return result</text>
+  <line x1="450" y1="206" x2="260" y2="206" stroke="#000"/><text x="355" y="196" text-anchor="middle" font-size="11">Token and profile</text>
+</svg>
+</div><p>The sequence diagram shows the order of messages between user, client, backend, and data layer.</p><p>It demonstrates that the frontend acts as an interface layer while business rules remain centralized at the backend level.</p>
+          </main>
+          <footer class="page-footer">Page 29</footer>
+        </section>
 
-      <section class="page page-break">
-        <p class="eyebrow">Experiment-04</p>
-        <h2>Software Metrics</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Metric</th>
-              <th>Estimated Value</th>
-              <th>Interpretation</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>Estimated LOC</td><td>4,500</td><td>Combined frontend, backend, and documentation code assets.</td></tr>
-            <tr><td>Function Points</td><td>52</td><td>Based on login, product CRUD, movement logging, dashboard summaries, and reports.</td></tr>
-            <tr><td>Average Response Time</td><td>Below 2 seconds</td><td>Target for regular dashboard and inventory interactions.</td></tr>
-            <tr><td>Productivity</td><td>28 LOC per person-day</td><td>Reflects modular development pace for a small academic team.</td></tr>
-            <tr><td>Defect Density Target</td><td>Below 0.8 defects/KLOC</td><td>Indicates focus on correctness in stock calculations and auth flows.</td></tr>
-          </tbody>
-        </table>
+        <section class="page">
+          <header class="page-header">
+            <div>Experiment-01</div>
+            <div>Inventory Management System</div>
+          </header>
+          <main class="page-body">
+            <h2>Component Diagram</h2>
+            <div class='diagram-block'><h4>Component Diagram</h4>
+<svg viewBox="0 0 760 180" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="42" width="180" height="90" fill="#fff" stroke="#000"/>
+  <text x="110" y="78" text-anchor="middle" font-size="14">React Frontend</text>
+  <text x="110" y="100" text-anchor="middle" font-size="11">Dashboard, inventory, auth screens</text>
+  <rect x="290" y="42" width="180" height="90" fill="#fff" stroke="#000"/>
+  <text x="380" y="78" text-anchor="middle" font-size="14">Express Backend</text>
+  <text x="380" y="100" text-anchor="middle" font-size="11">Controllers, routes, business rules</text>
+  <rect x="560" y="42" width="180" height="90" fill="#fff" stroke="#000"/>
+  <text x="650" y="78" text-anchor="middle" font-size="14">Persistence</text>
+  <text x="650" y="100" text-anchor="middle" font-size="11">MongoDB or demo runtime store</text>
+  <line x1="200" y1="86" x2="290" y2="86" stroke="#000" stroke-width="1.4"/>
+  <line x1="470" y1="86" x2="560" y2="86" stroke="#000" stroke-width="1.4"/>
+</svg>
+</div><p>The component diagram separates the project into frontend, backend, and persistence responsibilities.</p><p>This decomposition is directly reflected in the folder structure of the delivered workspace.</p>
+          </main>
+          <footer class="page-footer">Page 30</footer>
+        </section>
 
-        <div class="two-col">
-          <div class="callout">
-            <h3>Metric Formula Examples</h3>
-            <p><strong>Productivity</strong> = Total LOC / Effort in person-days</p>
-            <p><strong>Defect Density</strong> = Number of defects / KLOC</p>
-            <p><strong>Inventory Value</strong> = Sum of quantity x unit cost</p>
-          </div>
-          <div class="callout">
-            <h3>Quality Focus</h3>
-            <p>
-              Inventory systems are highly sensitive to quantity mismatches. Therefore, the
-              most important metrics are stock accuracy, API correctness, and dashboard
-              consistency after every movement event.
-            </p>
-          </div>
-        </div>
+        <section class="page">
+          <header class="page-header">
+            <div>Experiment-01</div>
+            <div>Inventory Management System</div>
+          </header>
+          <main class="page-body">
+            <h2>Deployment Diagram</h2>
+            <div class='diagram-block'><h4>Deployment Diagram</h4>
+<svg viewBox="0 0 760 180" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="42" width="180" height="90" fill="#fff" stroke="#000"/>
+  <text x="110" y="78" text-anchor="middle" font-size="14">Client Machine</text>
+  <text x="110" y="100" text-anchor="middle" font-size="11">Browser access for admin/staff</text>
+  <rect x="290" y="42" width="180" height="90" fill="#fff" stroke="#000"/>
+  <text x="380" y="78" text-anchor="middle" font-size="14">Application Server</text>
+  <text x="380" y="100" text-anchor="middle" font-size="11">Node.js runtime and static frontend</text>
+  <rect x="560" y="42" width="180" height="90" fill="#fff" stroke="#000"/>
+  <text x="650" y="78" text-anchor="middle" font-size="14">Database Server</text>
+  <text x="650" y="100" text-anchor="middle" font-size="11">MongoDB Atlas or local DB node</text>
+  <line x1="200" y1="86" x2="290" y2="86" stroke="#000" stroke-width="1.4"/>
+  <line x1="470" y1="86" x2="560" y2="86" stroke="#000" stroke-width="1.4"/>
+</svg>
+</div><p>The deployment diagram represents how the browser, application server, and database layer interact.</p><p>Even in academic local execution, this logical separation remains important because it informs deployment, security, and debugging decisions.</p>
+          </main>
+          <footer class="page-footer">Page 31</footer>
+        </section>
 
-        <p class="eyebrow">Experiment-05</p>
-        <h2>Project Cost Estimation</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Cost Head</th>
-              <th>Estimated Cost (INR)</th>
-              <th>Remarks</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>Requirement and design</td><td>18,000</td><td>Analysis, SRS, diagrams, and architecture planning.</td></tr>
-            <tr><td>Backend development</td><td>42,000</td><td>Authentication, API routes, models, business logic.</td></tr>
-            <tr><td>Frontend development</td><td>38,000</td><td>Responsive UI, forms, tables, and dashboard layout.</td></tr>
-            <tr><td>Testing and QA</td><td>14,000</td><td>Flow checks, data validation, and UI verification.</td></tr>
-            <tr><td>Documentation</td><td>10,000</td><td>SPM report, project notes, and deployment guidance.</td></tr>
-            <tr><th>Total Estimated Cost</th><th>122,000</th><th>Moderate-cost academic or prototype implementation.</th></tr>
-          </tbody>
-        </table>
-      </section>
+<section class="page">
+  <header class="page-header">
+    <div>Implementation View</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Authentication Module</h2>
+    <div class='section'><h3>Discussion</h3><p>Authentication Module is an important part of the Inventory Management System because it directly affects secure access and session control. In an academic software project, this area must be documented clearly so the reviewer can understand why the chosen design and planning decisions are reasonable.</p><p>The project approaches authentication module through a practical MERN perspective. Instead of treating the subject as an isolated theory topic, the report connects it with inventory tasks such as product registration, quantity tracking, stock validation, dashboard reporting, and role-based usage.</p><p>From a management angle, authentication module influences scope stability, implementation order, testing effort, and maintenance readiness. Therefore it deserves dedicated space in the report rather than being merged into a short summary.</p></div><div class='section'><h3>Key Points</h3><ul><li>Supports user registration and login.</li><li>Protects backend routes through token-based access control.</li><li>Separates anonymous routes from protected operational routes.</li><li>Creates the security foundation for inventory operations.</li></ul></div><div class='section'><h3>Observation</h3><p>The discussion of authentication module shows that the project is not only about writing code. It also requires deliberate control over secure access and session control so the implemented system remains correct, understandable, and suitable for academic evaluation.</p></div>
+  </main>
+  <footer class="page-footer">Page 32</footer>
+</section>
 
-      <section class="page page-break">
-        <p class="eyebrow">Experiment-06</p>
-        <h2>Resource Allocation</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Resource Type</th>
-              <th>Allocated Items</th>
-              <th>Purpose</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>Human Resources</td><td>Project manager, MERN developer, UI designer, tester</td><td>Execution, review, quality assurance, and coordination.</td></tr>
-            <tr><td>Hardware Resources</td><td>Laptop/desktop, internet connection</td><td>Development, local testing, and report preparation.</td></tr>
-            <tr><td>Software Resources</td><td>Node.js, MongoDB, VS Code, browser, Git</td><td>Programming, storage, testing, and collaboration.</td></tr>
-            <tr><td>Time Resources</td><td>8-week academic schedule</td><td>Requirement analysis through final documentation.</td></tr>
-          </tbody>
-        </table>
+<section class="page">
+  <header class="page-header">
+    <div>Implementation View</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Catalog Module</h2>
+    <div class='section'><h3>Discussion</h3><p>Catalog Module is an important part of the Inventory Management System because it directly affects maintaining clean product information. In an academic software project, this area must be documented clearly so the reviewer can understand why the chosen design and planning decisions are reasonable.</p><p>The project approaches catalog module through a practical MERN perspective. Instead of treating the subject as an isolated theory topic, the report connects it with inventory tasks such as product registration, quantity tracking, stock validation, dashboard reporting, and role-based usage.</p><p>From a management angle, catalog module influences scope stability, implementation order, testing effort, and maintenance readiness. Therefore it deserves dedicated space in the report rather than being merged into a short summary.</p></div><div class='section'><h3>Key Points</h3><ul><li>Stores SKU, supplier, location, and pricing information.</li><li>Supports update operations without re-creating records.</li><li>Links products with categories for organized browsing.</li><li>Acts as the stable reference point for movement operations.</li></ul></div><div class='section'><h3>Observation</h3><p>The discussion of catalog module shows that the project is not only about writing code. It also requires deliberate control over maintaining clean product information so the implemented system remains correct, understandable, and suitable for academic evaluation.</p></div>
+  </main>
+  <footer class="page-footer">Page 33</footer>
+</section>
 
-        <p class="eyebrow">Experiment-07</p>
-        <h2>Team Structure and Roles</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Role</th>
-              <th>Responsibilities</th>
-              <th>Main Deliverables</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>Project Manager</td><td>Planning, milestone review, coordination</td><td>Timeline, WBS, overall delivery control</td></tr>
-            <tr><td>Backend Developer</td><td>API, models, auth, stock logic</td><td>Express server and MongoDB integration</td></tr>
-            <tr><td>Frontend Developer</td><td>UI design, forms, dashboard, responsiveness</td><td>React interface and soft-tone user experience</td></tr>
-            <tr><td>Tester</td><td>Flow testing, validation, regression checks</td><td>Bug reports and quality review notes</td></tr>
-          </tbody>
-        </table>
+<section class="page">
+  <header class="page-header">
+    <div>Implementation View</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Stock Movement Module</h2>
+    <div class='section'><h3>Discussion</h3><p>Stock Movement Module is an important part of the Inventory Management System because it directly affects quantity correctness and traceability. In an academic software project, this area must be documented clearly so the reviewer can understand why the chosen design and planning decisions are reasonable.</p><p>The project approaches stock movement module through a practical MERN perspective. Instead of treating the subject as an isolated theory topic, the report connects it with inventory tasks such as product registration, quantity tracking, stock validation, dashboard reporting, and role-based usage.</p><p>From a management angle, stock movement module influences scope stability, implementation order, testing effort, and maintenance readiness. Therefore it deserves dedicated space in the report rather than being merged into a short summary.</p></div><div class='section'><h3>Key Points</h3><ul><li>Handles stock-in, stock-out, and adjustment transactions.</li><li>Prevents invalid negative stock states.</li><li>Preserves reference, note, and before/after quantity values.</li><li>Provides the operational backbone of the inventory system.</li></ul></div><div class='section'><h3>Observation</h3><p>The discussion of stock movement module shows that the project is not only about writing code. It also requires deliberate control over quantity correctness and traceability so the implemented system remains correct, understandable, and suitable for academic evaluation.</p></div>
+  </main>
+  <footer class="page-footer">Page 34</footer>
+</section>
 
-        <div class="summary-grid">
-          <div class="summary-card">
-            <strong>Project Outcome</strong>
-            <p>A modern inventory platform that improves visibility and reduces manual stock errors.</p>
-          </div>
-          <div class="summary-card">
-            <strong>Business Benefit</strong>
-            <p>Faster stock updates, better replenishment awareness, and cleaner warehouse operations.</p>
-          </div>
-          <div class="summary-card">
-            <strong>Technical Benefit</strong>
-            <p>Separation of concerns between frontend, backend, and persistence layers.</p>
-          </div>
-          <div class="summary-card">
-            <strong>Future Scope</strong>
-            <p>Barcode support, supplier purchase orders, analytics exports, and deployment automation.</p>
-          </div>
-        </div>
+<section class="page">
+  <header class="page-header">
+    <div>Implementation View</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Dashboard Module</h2>
+    <div class='section'><h3>Discussion</h3><p>Dashboard Module is an important part of the Inventory Management System because it directly affects summary visibility and alert-oriented insight. In an academic software project, this area must be documented clearly so the reviewer can understand why the chosen design and planning decisions are reasonable.</p><p>The project approaches dashboard module through a practical MERN perspective. Instead of treating the subject as an isolated theory topic, the report connects it with inventory tasks such as product registration, quantity tracking, stock validation, dashboard reporting, and role-based usage.</p><p>From a management angle, dashboard module influences scope stability, implementation order, testing effort, and maintenance readiness. Therefore it deserves dedicated space in the report rather than being merged into a short summary.</p></div><div class='section'><h3>Key Points</h3><ul><li>Computes inventory value and status-oriented counts.</li><li>Lists recent activity for quick operational review.</li><li>Highlights low-stock and out-of-stock conditions.</li><li>Supports faster managerial understanding of warehouse state.</li></ul></div><div class='section'><h3>Observation</h3><p>The discussion of dashboard module shows that the project is not only about writing code. It also requires deliberate control over summary visibility and alert-oriented insight so the implemented system remains correct, understandable, and suitable for academic evaluation.</p></div>
+  </main>
+  <footer class="page-footer">Page 35</footer>
+</section>
 
-        <h2>Conclusion</h2>
-        <p>
-          The Inventory Management System demonstrates how a MERN-based application can be
-          planned, implemented, and documented using standard software project management
-          practices. The project replaces fragile manual workflows with a structured,
-          secure, and user-friendly platform for product management and stock visibility.
-        </p>
-        <p>
-          Through SRS preparation, UML diagrams, WBS, Gantt planning, metrics, cost
-          estimation, and team structuring, the project provides both a practical software
-          solution and a complete academic documentation package.
-        </p>
-      </section>
-    </main>
-  </body>
-</html>
+<section class="page">
+  <header class="page-header">
+    <div>Implementation View</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Frontend Design Strategy</h2>
+    <div class='section'><h3>Discussion</h3><p>Frontend Design Strategy is an important part of the Inventory Management System because it directly affects usable and calm interaction design. In an academic software project, this area must be documented clearly so the reviewer can understand why the chosen design and planning decisions are reasonable.</p><p>The project approaches frontend design strategy through a practical MERN perspective. Instead of treating the subject as an isolated theory topic, the report connects it with inventory tasks such as product registration, quantity tracking, stock validation, dashboard reporting, and role-based usage.</p><p>From a management angle, frontend design strategy influences scope stability, implementation order, testing effort, and maintenance readiness. Therefore it deserves dedicated space in the report rather than being merged into a short summary.</p></div><div class='section'><h3>Key Points</h3><ul><li>Soft-tone styling reduces harsh visual contrast during routine use.</li><li>Cards, forms, and tables are grouped to support scan-friendly reading.</li><li>Responsive layout allows the same interface to degrade gracefully on smaller screens.</li><li>Clear hierarchy improves confidence when entering stock-sensitive data.</li></ul></div><div class='section'><h3>Observation</h3><p>The discussion of frontend design strategy shows that the project is not only about writing code. It also requires deliberate control over usable and calm interaction design so the implemented system remains correct, understandable, and suitable for academic evaluation.</p></div>
+  </main>
+  <footer class="page-footer">Page 36</footer>
+</section>
+
+<section class="page">
+  <header class="page-header">
+    <div>Implementation View</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Backend Design Strategy</h2>
+    <div class='section'><h3>Discussion</h3><p>Backend Design Strategy is an important part of the Inventory Management System because it directly affects validation, modularity, and predictable api behavior. In an academic software project, this area must be documented clearly so the reviewer can understand why the chosen design and planning decisions are reasonable.</p><p>The project approaches backend design strategy through a practical MERN perspective. Instead of treating the subject as an isolated theory topic, the report connects it with inventory tasks such as product registration, quantity tracking, stock validation, dashboard reporting, and role-based usage.</p><p>From a management angle, backend design strategy influences scope stability, implementation order, testing effort, and maintenance readiness. Therefore it deserves dedicated space in the report rather than being merged into a short summary.</p></div><div class='section'><h3>Key Points</h3><ul><li>Routes, controllers, models, and utilities are separated into focused files.</li><li>Validation logic is kept near the business operation it protects.</li><li>Response payloads are structured to support predictable frontend use.</li><li>The architecture remains simple enough for academic explanation.</li></ul></div><div class='section'><h3>Observation</h3><p>The discussion of backend design strategy shows that the project is not only about writing code. It also requires deliberate control over validation, modularity, and predictable api behavior so the implemented system remains correct, understandable, and suitable for academic evaluation.</p></div>
+  </main>
+  <footer class="page-footer">Page 37</footer>
+</section>
+
+<section class="page">
+  <header class="page-header">
+    <div>Implementation View</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Input Design</h2>
+    <div class='section'><h3>Discussion</h3><p>Input Design is an important part of the Inventory Management System because it directly affects accuracy during data entry. In an academic software project, this area must be documented clearly so the reviewer can understand why the chosen design and planning decisions are reasonable.</p><p>The project approaches input design through a practical MERN perspective. Instead of treating the subject as an isolated theory topic, the report connects it with inventory tasks such as product registration, quantity tracking, stock validation, dashboard reporting, and role-based usage.</p><p>From a management angle, input design influences scope stability, implementation order, testing effort, and maintenance readiness. Therefore it deserves dedicated space in the report rather than being merged into a short summary.</p></div><div class='section'><h3>Key Points</h3><ul><li>Form fields are grouped logically to reduce confusion.</li><li>Numeric fields are used for quantity and pricing values.</li><li>Dropdowns are used for categories and movement types where appropriate.</li><li>Validation messages guide the user before invalid states are accepted.</li></ul></div><div class='section'><h3>Observation</h3><p>The discussion of input design shows that the project is not only about writing code. It also requires deliberate control over accuracy during data entry so the implemented system remains correct, understandable, and suitable for academic evaluation.</p></div>
+  </main>
+  <footer class="page-footer">Page 38</footer>
+</section>
+
+<section class="page">
+  <header class="page-header">
+    <div>Implementation View</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Output Design</h2>
+    <div class='section'><h3>Discussion</h3><p>Output Design is an important part of the Inventory Management System because it directly affects clear information presentation. In an academic software project, this area must be documented clearly so the reviewer can understand why the chosen design and planning decisions are reasonable.</p><p>The project approaches output design through a practical MERN perspective. Instead of treating the subject as an isolated theory topic, the report connects it with inventory tasks such as product registration, quantity tracking, stock validation, dashboard reporting, and role-based usage.</p><p>From a management angle, output design influences scope stability, implementation order, testing effort, and maintenance readiness. Therefore it deserves dedicated space in the report rather than being merged into a short summary.</p></div><div class='section'><h3>Key Points</h3><ul><li>Dashboard cards summarize the most important operational indicators.</li><li>Tables provide structured product and movement views.</li><li>Status pills help users identify stock conditions quickly.</li><li>Recent activity panels support short-term operational recall.</li></ul></div><div class='section'><h3>Observation</h3><p>The discussion of output design shows that the project is not only about writing code. It also requires deliberate control over clear information presentation so the implemented system remains correct, understandable, and suitable for academic evaluation.</p></div>
+  </main>
+  <footer class="page-footer">Page 39</footer>
+</section>
+
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-02</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Aim and Theory of WBS</h2>
+    <div class='section'><h3>Aim</h3><p>To study the principles of project decomposition and to prepare a Work Breakdown Structure for the Inventory Management System.</p></div><div class='section'><h3>Theory</h3><p>A Work Breakdown Structure divides the total scope of a project into smaller and manageable pieces. It helps the team understand what must be done, who may own each task, and how progress should be tracked.</p><p>For software projects, WBS is especially useful because hidden work such as testing, integration, and documentation is often underestimated unless it is explicitly represented.</p></div>
+  </main>
+  <footer class="page-footer">Page 40</footer>
+</section>
+
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-02</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>WBS Part I</h2>
+    <table><thead><tr><th>WBS ID</th><th>Task</th><th>Subtask</th><th>Output</th></tr></thead><tbody><tr><td>1.0</td><td>Requirement Analysis</td><td>Problem study and feature identification</td><td>Requirement notes</td></tr><tr><td>1.1</td><td>SRS Preparation</td><td>Formal requirement documentation</td><td>SRS chapter</td></tr><tr><td>2.0</td><td>System Design</td><td>Architecture and data model creation</td><td>Design package</td></tr><tr><td>2.1</td><td>UML Modelling</td><td>Use case, class, and activity views</td><td>Diagram set</td></tr></tbody></table>
+  </main>
+  <footer class="page-footer">Page 41</footer>
+</section>
+
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-02</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>WBS Part II</h2>
+    <table><thead><tr><th>WBS ID</th><th>Task</th><th>Subtask</th><th>Output</th></tr></thead><tbody><tr><td>3.0</td><td>Backend Development</td><td>Routes, controllers, models, auth</td><td>API implementation</td></tr><tr><td>4.0</td><td>Frontend Development</td><td>Pages, forms, dashboard, routing</td><td>React implementation</td></tr><tr><td>5.0</td><td>Integration and Testing</td><td>API linkage and flow validation</td><td>Working app</td></tr><tr><td>6.0</td><td>Documentation</td><td>SPM report and PDF output</td><td>Submission package</td></tr></tbody></table><div class='section'><h3>WBS Observation</h3><p>The WBS reveals that implementation is only one part of the total scope. Analysis, modelling, integration, testing, and reporting are equally necessary for successful completion.</p></div>
+  </main>
+  <footer class="page-footer">Page 42</footer>
+</section>
+
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-02</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>WBS Output and Interpretation</h2>
+    <div class='section'><h3>Discussion</h3><p>Work Breakdown Interpretation is an important part of the Inventory Management System because it directly affects scope control and planning discipline. In an academic software project, this area must be documented clearly so the reviewer can understand why the chosen design and planning decisions are reasonable.</p><p>The project approaches work breakdown interpretation through a practical MERN perspective. Instead of treating the subject as an isolated theory topic, the report connects it with inventory tasks such as product registration, quantity tracking, stock validation, dashboard reporting, and role-based usage.</p><p>From a management angle, work breakdown interpretation influences scope stability, implementation order, testing effort, and maintenance readiness. Therefore it deserves dedicated space in the report rather than being merged into a short summary.</p></div><div class='section'><h3>Key Points</h3><ul><li>The WBS reduces the chance of forgotten project work.</li><li>Task granularity supports more realistic time estimation.</li><li>Deliverables become easier to map against milestones.</li><li>Documentation work is treated as planned scope rather than leftover work.</li></ul></div><div class='section'><h3>Observation</h3><p>The discussion of work breakdown interpretation shows that the project is not only about writing code. It also requires deliberate control over scope control and planning discipline so the implemented system remains correct, understandable, and suitable for academic evaluation.</p></div>
+  </main>
+  <footer class="page-footer">Page 43</footer>
+</section>
+
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-03</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Aim and Theory of Gantt Chart</h2>
+    <div class='section'><h3>Aim</h3><p>To create and analyze a Gantt-style timeline for the Inventory Management System so major tasks and dependencies can be visualized across the project schedule.</p></div><div class='section'><h3>Theory</h3><p>A Gantt chart maps project tasks against calendar time. It helps reviewers understand not just which tasks exist, but also when they occur and how long they remain active.</p><p>In software engineering, the Gantt view is useful because technical tasks often depend on earlier analytical work. It is therefore a practical complement to the WBS.</p></div>
+  </main>
+  <footer class="page-footer">Page 44</footer>
+</section>
+
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-03</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Gantt Schedule</h2>
+    <table><thead><tr><th>Task</th><th>W1</th><th>W2</th><th>W3</th><th>W4</th><th>W5</th><th>W6</th><th>W7</th><th>W8</th></tr></thead><tbody><tr><td>Requirement analysis</td><td>X</td><td>X</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr><tr><td>Design and UML</td><td>-</td><td>X</td><td>X</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr><tr><td>Backend development</td><td>-</td><td>-</td><td>X</td><td>X</td><td>X</td><td>-</td><td>-</td><td>-</td></tr><tr><td>Frontend development</td><td>-</td><td>-</td><td>-</td><td>X</td><td>X</td><td>X</td><td>-</td><td>-</td></tr><tr><td>Integration</td><td>-</td><td>-</td><td>-</td><td>-</td><td>X</td><td>X</td><td>-</td><td>-</td></tr><tr><td>Testing and documentation</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>X</td><td>X</td><td>X</td></tr></tbody></table>
+  </main>
+  <footer class="page-footer">Page 45</footer>
+</section>
+
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-03</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Milestones and Dependencies</h2>
+    <div class='section'><h3>Discussion</h3><p>Schedule Dependencies is an important part of the Inventory Management System because it directly affects ordering of work and delivery rhythm. In an academic software project, this area must be documented clearly so the reviewer can understand why the chosen design and planning decisions are reasonable.</p><p>The project approaches schedule dependencies through a practical MERN perspective. Instead of treating the subject as an isolated theory topic, the report connects it with inventory tasks such as product registration, quantity tracking, stock validation, dashboard reporting, and role-based usage.</p><p>From a management angle, schedule dependencies influences scope stability, implementation order, testing effort, and maintenance readiness. Therefore it deserves dedicated space in the report rather than being merged into a short summary.</p></div><div class='section'><h3>Key Points</h3><ul><li>Requirement clarity must precede design quality.</li><li>Design maturity improves backend and frontend alignment.</li><li>Integration depends on both sides of implementation being ready.</li><li>Documentation becomes stronger when created alongside project progress.</li></ul></div><div class='section'><h3>Observation</h3><p>The discussion of schedule dependencies shows that the project is not only about writing code. It also requires deliberate control over ordering of work and delivery rhythm so the implemented system remains correct, understandable, and suitable for academic evaluation.</p></div>
+  </main>
+  <footer class="page-footer">Page 46</footer>
+</section>
+
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-03</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Schedule Risk and Control</h2>
+    <div class='section'><h3>Discussion</h3><p>Schedule Risk is an important part of the Inventory Management System because it directly affects protecting the project timeline. In an academic software project, this area must be documented clearly so the reviewer can understand why the chosen design and planning decisions are reasonable.</p><p>The project approaches schedule risk through a practical MERN perspective. Instead of treating the subject as an isolated theory topic, the report connects it with inventory tasks such as product registration, quantity tracking, stock validation, dashboard reporting, and role-based usage.</p><p>From a management angle, schedule risk influences scope stability, implementation order, testing effort, and maintenance readiness. Therefore it deserves dedicated space in the report rather than being merged into a short summary.</p></div><div class='section'><h3>Key Points</h3><ul><li>Database setup can delay full end-to-end verification.</li><li>Late documentation leads to rushed formatting and weak explanation.</li><li>Underestimated UI refinement can affect integration timing.</li><li>Missing early scope control increases downstream rework.</li></ul></div><div class='section'><h3>Observation</h3><p>The discussion of schedule risk shows that the project is not only about writing code. It also requires deliberate control over protecting the project timeline so the implemented system remains correct, understandable, and suitable for academic evaluation.</p></div>
+  </main>
+  <footer class="page-footer">Page 47</footer>
+</section>
+
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-04</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Aim and Theory of Software Metrics</h2>
+    <div class='section'><h3>Aim</h3><p>To study the role of software metrics in measuring project size, effort, time, productivity, and quality for the Inventory Management System.</p></div><div class='section'><h3>Theory</h3><p>Software metrics turn qualitative judgment into manageable quantitative estimates. They allow project managers to reason about size, effort, productivity, and quality more systematically.</p><p>Metrics do not replace engineering judgment, but they support better planning and better comparison between estimated and actual work.</p></div>
+  </main>
+  <footer class="page-footer">Page 48</footer>
+</section>
+
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-04</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Size Metrics</h2>
+    <table><thead><tr><th>Metric</th><th>Estimated Value</th><th>Meaning</th></tr></thead><tbody><tr><td>Lines of Code</td><td>Approximately 4,500-5,000</td><td>Combined frontend, backend, and supporting assets</td></tr><tr><td>Function Points</td><td>Approximately 52</td><td>Feature-level estimate across auth, inventory, dashboard, and report support</td></tr><tr><td>Collection Count</td><td>4 primary entities</td><td>User, Category, Product, StockMovement</td></tr></tbody></table>
+  </main>
+  <footer class="page-footer">Page 49</footer>
+</section>
+
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-04</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Effort and Time Metrics</h2>
+    <table><thead><tr><th>Metric</th><th>Estimated Value</th><th>Interpretation</th></tr></thead><tbody><tr><td>Effort</td><td>180 person-hours</td><td>Total projected labor across the lifecycle</td></tr><tr><td>Schedule</td><td>8 weeks</td><td>Calendar time for the academic project</td></tr><tr><td>Average task block</td><td>1 to 2 weeks</td><td>Typical milestone span for grouped activities</td></tr></tbody></table><div class='section'><h3>Metric Note</h3><p>Effort and schedule must be read together because a short schedule can still contain high labor concentration.</p></div>
+  </main>
+  <footer class="page-footer">Page 50</footer>
+</section>
+
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-04</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Productivity and Quality Metrics</h2>
+    <table><thead><tr><th>Metric</th><th>Estimated Value</th><th>Interpretation</th></tr></thead><tbody><tr><td>Productivity</td><td>25-30 LOC per person-day</td><td>Moderate rate for structured academic work</td></tr><tr><td>Target response time</td><td>Below 2 seconds</td><td>Supports interactive usability</td></tr><tr><td>Defect density target</td><td>Below 0.8 defects/KLOC</td><td>Emphasizes correctness</td></tr><tr><td>Rework target</td><td>Below 15 percent</td><td>Indicates stable requirements</td></tr></tbody></table>
+  </main>
+  <footer class="page-footer">Page 51</footer>
+</section>
+
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-04</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Metric Interpretation and Output</h2>
+    <div class='section'><h3>Discussion</h3><p>Metric Interpretation is an important part of the Inventory Management System because it directly affects using numbers responsibly in project review. In an academic software project, this area must be documented clearly so the reviewer can understand why the chosen design and planning decisions are reasonable.</p><p>The project approaches metric interpretation through a practical MERN perspective. Instead of treating the subject as an isolated theory topic, the report connects it with inventory tasks such as product registration, quantity tracking, stock validation, dashboard reporting, and role-based usage.</p><p>From a management angle, metric interpretation influences scope stability, implementation order, testing effort, and maintenance readiness. Therefore it deserves dedicated space in the report rather than being merged into a short summary.</p></div><div class='section'><h3>Key Points</h3><ul><li>Metrics help comparison, not blind decision making.</li><li>Quality metrics matter more than raw code volume in inventory software.</li><li>Productivity must be balanced against correctness and maintainability.</li><li>Estimates should be revisited after integration and testing.</li></ul></div><div class='section'><h3>Observation</h3><p>The discussion of metric interpretation shows that the project is not only about writing code. It also requires deliberate control over using numbers responsibly in project review so the implemented system remains correct, understandable, and suitable for academic evaluation.</p></div>
+  </main>
+  <footer class="page-footer">Page 52</footer>
+</section>
+
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-05</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Aim and Theory of Cost Estimation</h2>
+    <div class='section'><h3>Aim</h3><p>To estimate and analyze the financial requirements of the Inventory Management System including development, testing, and maintenance cost components.</p></div><div class='section'><h3>Theory</h3><p>Cost estimation translates project effort into financial understanding. It supports budgeting, feasibility review, and prioritization of work.</p><p>Even for academic projects, a realistic estimate shows management maturity because it connects features and effort with resource consumption.</p></div>
+  </main>
+  <footer class="page-footer">Page 53</footer>
+</section>
+
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-05</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Development Cost Estimation</h2>
+    <table><thead><tr><th>Cost Head</th><th>Amount (INR)</th><th>Reason</th></tr></thead><tbody><tr><td>Requirement analysis</td><td>18,000</td><td>Scope study and requirement documentation</td></tr><tr><td>Design and modelling</td><td>12,000</td><td>Architecture and UML preparation</td></tr><tr><td>Backend development</td><td>42,000</td><td>Controllers, routes, models, authentication</td></tr><tr><td>Frontend development</td><td>38,000</td><td>Screens, forms, state handling, responsive UI</td></tr></tbody></table>
+  </main>
+  <footer class="page-footer">Page 54</footer>
+</section>
+
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-05</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Testing, Documentation, and Support Cost</h2>
+    <table><thead><tr><th>Cost Head</th><th>Amount (INR)</th><th>Reason</th></tr></thead><tbody><tr><td>Testing and QA</td><td>14,000</td><td>Scenario validation and issue review</td></tr><tr><td>Documentation</td><td>10,000</td><td>SPM formatting and report output</td></tr><tr><td>Infrastructure and tool support</td><td>6,000</td><td>Connectivity and platform support</td></tr><tr><td>Maintenance reserve</td><td>12,000</td><td>Post-delivery fixes and small changes</td></tr></tbody></table>
+  </main>
+  <footer class="page-footer">Page 55</footer>
+</section>
+
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-05</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Total Cost and Cost Observation</h2>
+    <div class='section'><h3>Total Cost</h3><p>The overall estimated project cost is approximately INR 160,000 including reserve and support categories.</p></div><div class='section'><h3>Observation</h3><p>The estimate indicates a moderate-cost prototype-scale software project. The largest share belongs to implementation effort because coding and integration consume the majority of project labor.</p><p>Reserve categories are included intentionally because environment setup, bug fixing, and formatting changes frequently appear near delivery time.</p></div>
+  </main>
+  <footer class="page-footer">Page 56</footer>
+</section>
+
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-06</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Aim and Theory of Resource Allocation</h2>
+    <div class='section'><h3>Aim</h3><p>To identify and allocate the human, hardware, software, and time resources required for the Inventory Management System.</p></div><div class='section'><h3>Theory</h3><p>Resource allocation helps the project move from intention to execution. A task cannot be completed unless the right capability and environment are available at the right time.</p><p>In software work, resource planning includes people, technical tools, access conditions, and schedule availability.</p></div>
+  </main>
+  <footer class="page-footer">Page 57</footer>
+</section>
+
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-06</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Human Resource Allocation</h2>
+    <table><thead><tr><th>Role</th><th>Responsibility</th><th>Reason for Allocation</th></tr></thead><tbody><tr><td>Project Manager</td><td>Planning and coordination</td><td>Maintains scope and schedule control</td></tr><tr><td>Backend Developer</td><td>API and logic implementation</td><td>Builds protected business operations</td></tr><tr><td>Frontend Developer</td><td>UI and interaction implementation</td><td>Creates user-facing workflow</td></tr><tr><td>Tester</td><td>Validation and quality review</td><td>Protects reliability and acceptance</td></tr></tbody></table>
+  </main>
+  <footer class="page-footer">Page 58</footer>
+</section>
+
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-06</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Hardware and Software Allocation</h2>
+    <table><thead><tr><th>Resource Type</th><th>Allocated Resource</th><th>Purpose</th></tr></thead><tbody><tr><td>Hardware</td><td>Laptop/Desktop workstation</td><td>Coding, testing, and report work</td></tr><tr><td>Hardware</td><td>Internet connection</td><td>Dependencies and deployment tasks</td></tr><tr><td>Software</td><td>Node.js and npm</td><td>Runtime and package management</td></tr><tr><td>Software</td><td>MongoDB Atlas</td><td>Persistent data layer</td></tr><tr><td>Software</td><td>Browser and code editor</td><td>Testing and development</td></tr></tbody></table>
+  </main>
+  <footer class="page-footer">Page 59</footer>
+</section>
+
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-06</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Time Resource Allocation and Observation</h2>
+    <div class='section'><h3>Discussion</h3><p>Time Allocation is an important part of the Inventory Management System because it directly affects balancing analysis, development, and documentation. In an academic software project, this area must be documented clearly so the reviewer can understand why the chosen design and planning decisions are reasonable.</p><p>The project approaches time allocation through a practical MERN perspective. Instead of treating the subject as an isolated theory topic, the report connects it with inventory tasks such as product registration, quantity tracking, stock validation, dashboard reporting, and role-based usage.</p><p>From a management angle, time allocation influences scope stability, implementation order, testing effort, and maintenance readiness. Therefore it deserves dedicated space in the report rather than being merged into a short summary.</p></div><div class='section'><h3>Key Points</h3><ul><li>Early weeks focus on analysis and design.</li><li>Middle weeks focus on backend and frontend implementation.</li><li>Final weeks focus on integration, testing, deployment, and report completion.</li><li>Documentation is strongest when written incrementally rather than postponed.</li></ul></div><div class='section'><h3>Observation</h3><p>The discussion of time allocation shows that the project is not only about writing code. It also requires deliberate control over balancing analysis, development, and documentation so the implemented system remains correct, understandable, and suitable for academic evaluation.</p></div>
+  </main>
+  <footer class="page-footer">Page 60</footer>
+</section>
+
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-07</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Aim and Theory of Team Structure</h2>
+    <div class='section'><h3>Aim</h3><p>To study and design the team structure, reporting relationships, and role responsibilities suitable for the Inventory Management System.</p></div><div class='section'><h3>Theory</h3><p>Team structure makes ownership visible. It shows who plans, who implements, who verifies, and who closes the project.</p><p>Without team structure, software projects often suffer from overlap, missing accountability, and unclear communication.</p></div>
+  </main>
+  <footer class="page-footer">Page 61</footer>
+</section>
+
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-07</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Team Roles and Responsibilities</h2>
+    <table><thead><tr><th>Role</th><th>Main Duties</th><th>Primary Deliverable</th></tr></thead><tbody><tr><td>Project Manager</td><td>Coordinate work and monitor progress</td><td>Controlled timeline</td></tr><tr><td>Backend Developer</td><td>Build data and API logic</td><td>Stable server-side implementation</td></tr><tr><td>Frontend Developer</td><td>Build user interaction and layout</td><td>Usable client-side implementation</td></tr><tr><td>Tester</td><td>Review scenarios and report faults</td><td>Quality findings</td></tr></tbody></table>
+  </main>
+  <footer class="page-footer">Page 62</footer>
+</section>
+
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-07</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Responsibility Matrix</h2>
+    <table><thead><tr><th>Activity</th><th>Project Manager</th><th>Backend Dev</th><th>Frontend Dev</th><th>Tester</th></tr></thead><tbody><tr><td>Requirement review</td><td>High</td><td>Medium</td><td>Medium</td><td>Low</td></tr><tr><td>API implementation</td><td>Low</td><td>High</td><td>Low</td><td>Medium</td></tr><tr><td>UI implementation</td><td>Low</td><td>Low</td><td>High</td><td>Medium</td></tr><tr><td>Testing</td><td>Medium</td><td>Medium</td><td>Medium</td><td>High</td></tr><tr><td>Documentation closure</td><td>High</td><td>Medium</td><td>Medium</td><td>Low</td></tr></tbody></table>
+  </main>
+  <footer class="page-footer">Page 63</footer>
+</section>
+
+<section class="page">
+  <header class="page-header">
+    <div>Experiment-07</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Communication and Governance Plan</h2>
+    <div class='section'><h3>Discussion</h3><p>Communication Plan is an important part of the Inventory Management System because it directly affects coordination and issue escalation. In an academic software project, this area must be documented clearly so the reviewer can understand why the chosen design and planning decisions are reasonable.</p><p>The project approaches communication plan through a practical MERN perspective. Instead of treating the subject as an isolated theory topic, the report connects it with inventory tasks such as product registration, quantity tracking, stock validation, dashboard reporting, and role-based usage.</p><p>From a management angle, communication plan influences scope stability, implementation order, testing effort, and maintenance readiness. Therefore it deserves dedicated space in the report rather than being merged into a short summary.</p></div><div class='section'><h3>Key Points</h3><ul><li>Weekly review helps compare planned and completed work.</li><li>Integration issues should be discussed quickly rather than accumulated.</li><li>Documentation decisions should follow implementation reality.</li><li>Final submission should be made only from verified files.</li></ul></div><div class='section'><h3>Observation</h3><p>The discussion of communication plan shows that the project is not only about writing code. It also requires deliberate control over coordination and issue escalation so the implemented system remains correct, understandable, and suitable for academic evaluation.</p></div>
+  </main>
+  <footer class="page-footer">Page 64</footer>
+</section>
+
+<section class="page">
+  <header class="page-header">
+    <div>Quality Assurance</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Testing Strategy</h2>
+    <div class='section'><h3>Discussion</h3><p>Testing Strategy is an important part of the Inventory Management System because it directly affects verifying behavior rather than only appearance. In an academic software project, this area must be documented clearly so the reviewer can understand why the chosen design and planning decisions are reasonable.</p><p>The project approaches testing strategy through a practical MERN perspective. Instead of treating the subject as an isolated theory topic, the report connects it with inventory tasks such as product registration, quantity tracking, stock validation, dashboard reporting, and role-based usage.</p><p>From a management angle, testing strategy influences scope stability, implementation order, testing effort, and maintenance readiness. Therefore it deserves dedicated space in the report rather than being merged into a short summary.</p></div><div class='section'><h3>Key Points</h3><ul><li>Authentication flow must accept valid users and reject invalid input.</li><li>Product operations must preserve unique SKU behavior.</li><li>Stock-out must never exceed available quantity.</li><li>Responsive layouts must remain readable on smaller screens.</li></ul></div><div class='section'><h3>Observation</h3><p>The discussion of testing strategy shows that the project is not only about writing code. It also requires deliberate control over verifying behavior rather than only appearance so the implemented system remains correct, understandable, and suitable for academic evaluation.</p></div>
+  </main>
+  <footer class="page-footer">Page 65</footer>
+</section>
+
+<section class="page">
+  <header class="page-header">
+    <div>Quality Assurance</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Representative Test Cases</h2>
+    <table><thead><tr><th>Test ID</th><th>Scenario</th><th>Expected Result</th></tr></thead><tbody><tr><td>TC-01</td><td>Login with valid credentials</td><td>Access granted and dashboard loaded</td></tr><tr><td>TC-02</td><td>Create duplicate SKU</td><td>Validation error shown</td></tr><tr><td>TC-03</td><td>Record invalid stock-out</td><td>Operation rejected</td></tr><tr><td>TC-04</td><td>Update product quantity</td><td>Status recalculated correctly</td></tr><tr><td>TC-05</td><td>Load on narrow screen</td><td>Layout remains usable</td></tr></tbody></table>
+  </main>
+  <footer class="page-footer">Page 66</footer>
+</section>
+
+<section class="page">
+  <header class="page-header">
+    <div>Quality Assurance</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Validation and Error Handling</h2>
+    <div class='section'><h3>Discussion</h3><p>Validation Strategy is an important part of the Inventory Management System because it directly affects protecting the system from inconsistent state. In an academic software project, this area must be documented clearly so the reviewer can understand why the chosen design and planning decisions are reasonable.</p><p>The project approaches validation strategy through a practical MERN perspective. Instead of treating the subject as an isolated theory topic, the report connects it with inventory tasks such as product registration, quantity tracking, stock validation, dashboard reporting, and role-based usage.</p><p>From a management angle, validation strategy influences scope stability, implementation order, testing effort, and maintenance readiness. Therefore it deserves dedicated space in the report rather than being merged into a short summary.</p></div><div class='section'><h3>Key Points</h3><ul><li>Required fields reduce incomplete record creation.</li><li>Numeric conversion ensures quantity and price consistency.</li><li>Error middleware standardizes backend failure responses.</li><li>Frontend feedback panels help users correct problems quickly.</li></ul></div><div class='section'><h3>Observation</h3><p>The discussion of validation strategy shows that the project is not only about writing code. It also requires deliberate control over protecting the system from inconsistent state so the implemented system remains correct, understandable, and suitable for academic evaluation.</p></div>
+  </main>
+  <footer class="page-footer">Page 67</footer>
+</section>
+
+<section class="page">
+  <header class="page-header">
+    <div>Project Control</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Risk Management</h2>
+    <div class='section'><h3>Discussion</h3><p>Risk Management is an important part of the Inventory Management System because it directly affects anticipating technical and process-level disruption. In an academic software project, this area must be documented clearly so the reviewer can understand why the chosen design and planning decisions are reasonable.</p><p>The project approaches risk management through a practical MERN perspective. Instead of treating the subject as an isolated theory topic, the report connects it with inventory tasks such as product registration, quantity tracking, stock validation, dashboard reporting, and role-based usage.</p><p>From a management angle, risk management influences scope stability, implementation order, testing effort, and maintenance readiness. Therefore it deserves dedicated space in the report rather than being merged into a short summary.</p></div><div class='section'><h3>Key Points</h3><ul><li>Database configuration may fail or be delayed.</li><li>Deployment settings may be entered incorrectly.</li><li>Late report work may reduce documentation quality.</li><li>Requirement drift may create unnecessary implementation churn.</li></ul></div><div class='section'><h3>Observation</h3><p>The discussion of risk management shows that the project is not only about writing code. It also requires deliberate control over anticipating technical and process-level disruption so the implemented system remains correct, understandable, and suitable for academic evaluation.</p></div>
+  </main>
+  <footer class="page-footer">Page 68</footer>
+</section>
+
+<section class="page">
+  <header class="page-header">
+    <div>Project Control</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Feasibility Analysis</h2>
+    <table><thead><tr><th>Feasibility Type</th><th>Assessment</th></tr></thead><tbody><tr><td>Technical</td><td>High due to mainstream stack and modular design</td></tr><tr><td>Operational</td><td>High because workflows are simple and task-oriented</td></tr><tr><td>Economic</td><td>Reasonable for prototype and academic scale</td></tr><tr><td>Schedule</td><td>Achievable with disciplined planning</td></tr></tbody></table>
+  </main>
+  <footer class="page-footer">Page 69</footer>
+</section>
+
+<section class="page">
+  <header class="page-header">
+    <div>Implementation</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Implementation Summary</h2>
+    <table><thead><tr><th>Area</th><th>Location</th><th>Status</th></tr></thead><tbody><tr><td>Backend</td><td>backend/src</td><td>Implemented</td></tr><tr><td>Frontend</td><td>frontend/src</td><td>Implemented</td></tr><tr><td>Deployment Config</td><td>render.yaml</td><td>Prepared</td></tr><tr><td>Documentation</td><td>docs</td><td>Prepared and expandable</td></tr></tbody></table><div class='section'><h3>Summary</h3><p>The delivered project includes the application code, deployment configuration, and report artefacts. It is therefore complete as an academic deliverable and ready for further verification and extension.</p></div>
+  </main>
+  <footer class="page-footer">Page 70</footer>
+</section>
+
+<section class="page">
+  <header class="page-header">
+    <div>Implementation</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Deployment Notes</h2>
+    <div class='section'><h3>Discussion</h3><p>Deployment Preparation is an important part of the Inventory Management System because it directly affects production readiness and environment setup. In an academic software project, this area must be documented clearly so the reviewer can understand why the chosen design and planning decisions are reasonable.</p><p>The project approaches deployment preparation through a practical MERN perspective. Instead of treating the subject as an isolated theory topic, the report connects it with inventory tasks such as product registration, quantity tracking, stock validation, dashboard reporting, and role-based usage.</p><p>From a management angle, deployment preparation influences scope stability, implementation order, testing effort, and maintenance readiness. Therefore it deserves dedicated space in the report rather than being merged into a short summary.</p></div><div class='section'><h3>Key Points</h3><ul><li>Render configuration has been added to the project.</li><li>MongoDB Atlas connection is configured through environment variables.</li><li>The backend can serve the built frontend for single-service deployment.</li><li>Health check and production scripts are defined for deployment use.</li></ul></div><div class='section'><h3>Observation</h3><p>The discussion of deployment preparation shows that the project is not only about writing code. It also requires deliberate control over production readiness and environment setup so the implemented system remains correct, understandable, and suitable for academic evaluation.</p></div>
+  </main>
+  <footer class="page-footer">Page 71</footer>
+</section>
+
+<section class="page">
+  <header class="page-header">
+    <div>Project Closure</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Future Enhancements</h2>
+    <div class='section'><h3>Discussion</h3><p>Future Enhancement Planning is an important part of the Inventory Management System because it directly affects extending the system beyond the current scope. In an academic software project, this area must be documented clearly so the reviewer can understand why the chosen design and planning decisions are reasonable.</p><p>The project approaches future enhancement planning through a practical MERN perspective. Instead of treating the subject as an isolated theory topic, the report connects it with inventory tasks such as product registration, quantity tracking, stock validation, dashboard reporting, and role-based usage.</p><p>From a management angle, future enhancement planning influences scope stability, implementation order, testing effort, and maintenance readiness. Therefore it deserves dedicated space in the report rather than being merged into a short summary.</p></div><div class='section'><h3>Key Points</h3><ul><li>Barcode support could speed up movement entry.</li><li>Purchase-order workflow could improve replenishment tracking.</li><li>Export features could support reporting and audit needs.</li><li>Manager-specific analytics could extend the role model.</li></ul></div><div class='section'><h3>Observation</h3><p>The discussion of future enhancement planning shows that the project is not only about writing code. It also requires deliberate control over extending the system beyond the current scope so the implemented system remains correct, understandable, and suitable for academic evaluation.</p></div>
+  </main>
+  <footer class="page-footer">Page 72</footer>
+</section>
+
+<section class="page">
+  <header class="page-header">
+    <div>Project Closure</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>Conclusion</h2>
+    <div class='section'><h3>Conclusion</h3><p>The Inventory Management System demonstrates a complete cycle from requirement understanding to deployable implementation. The project combines practical inventory features with structured software project management thinking.</p><p>Through SRS preparation, UML modelling, WBS and Gantt planning, metric analysis, cost estimation, resource allocation, team organization, testing, and deployment preparation, the report shows that successful software development depends on both technical execution and managerial discipline.</p><p>The final deliverable therefore serves both as a working MERN application and as a comprehensive academic report comparable in style and range to the reference sample.</p></div>
+  </main>
+  <footer class="page-footer">Page 73</footer>
+</section>
+
+<section class="page">
+  <header class="page-header">
+    <div>Project Closure</div>
+    <div>Inventory Management System</div>
+  </header>
+  <main class="page-body">
+    <h2>References</h2>
+    <div class='section'><h3>Reference Basis</h3><ul><li>Standard software project management concepts for planning, control, and quality assurance.</li><li>Common SRS organization patterns inspired by formal software engineering documentation practice.</li><li>UML conventions for use case, class, activity, sequence, component, and deployment representation.</li><li>The implemented Inventory Management System source files included in the project workspace.</li></ul></div>
+  </main>
+  <footer class="page-footer">Page 74</footer>
+</section>
+
+        </body>
+        </html>

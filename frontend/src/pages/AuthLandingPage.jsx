@@ -51,11 +51,11 @@ const AuthLandingPage = () => {
     <main className="auth-shell">
       <section className="auth-showcase">
         <p className="eyebrow">Inventory management system</p>
-        <h1>A softer retail dashboard with more motion, depth, and clarity.</h1>
+        <h1>A bold retail dashboard for clothes, skincare, and bags.</h1>
         <p>
           Manage premium product lines, monitor stock movement, and react to low-stock
-          signals from a calm workspace that feels closer to a brand studio than a plain
-          admin panel.
+          signals from a modern workspace that feels polished, colorful, and easier to
+          scan at every screen size.
         </p>
         <div className="showcase-pills">
           <span>Clothes</span>

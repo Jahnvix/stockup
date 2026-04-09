@@ -1,0 +1,508 @@
+:root {
+  --brand-indigo: #4f46e5;
+  --brand-violet: #7c3aed;
+  --brand-cyan: #06b6d4;
+  --brand-teal: #14b8a6;
+  --brand-orange: #f97316;
+  --brand-amber: #f59e0b;
+  --brand-pink: #ec4899;
+  --surface-white: #ffffff;
+  --surface-soft: #f8fafc;
+  --text-main: #111827;
+  --text-muted: #6b7280;
+  --shadow-strong: 0 28px 60px rgba(15, 23, 42, 0.12);
+  --shadow-medium: 0 18px 32px rgba(15, 23, 42, 0.1);
+}
+
+body {
+  color: var(--text-main);
+  background:
+    radial-gradient(circle at 10% 12%, rgba(79, 70, 229, 0.14), transparent 24%),
+    radial-gradient(circle at 88% 18%, rgba(249, 115, 22, 0.16), transparent 22%),
+    radial-gradient(circle at 78% 82%, rgba(6, 182, 212, 0.14), transparent 20%),
+    linear-gradient(180deg, #f8fbff 0%, #eef4ff 100%);
+}
+
+.muted-copy,
+.inventory-table p,
+.brand-copy,
+.dashboard-card p,
+.catalog-card__description,
+.catalog-card__metrics span,
+.catalog-card__actions p {
+  color: var(--text-muted);
+}
+
+.app-shell {
+  grid-template-columns: 290px minmax(0, 1fr);
+  gap: 1.4rem;
+}
+
+.brand-card,
+.season-card,
+.profile-card,
+.content-panel,
+.auth-card,
+.auth-showcase {
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: var(--shadow-medium);
+  backdrop-filter: blur(12px);
+}
+
+.brand-card {
+  background:
+    radial-gradient(circle at top right, rgba(249, 115, 22, 0.18), transparent 28%),
+    linear-gradient(135deg, rgba(79, 70, 229, 0.08), rgba(255, 255, 255, 0.96));
+}
+
+.brand-mark__seal {
+  background: linear-gradient(135deg, var(--brand-indigo), var(--brand-violet) 58%, var(--brand-orange));
+}
+
+.brand-wave {
+  height: 64px;
+  border-radius: 22px;
+  background:
+    linear-gradient(135deg, rgba(79, 70, 229, 0.92), rgba(124, 58, 237, 0.88) 55%, rgba(249, 115, 22, 0.82)),
+    linear-gradient(180deg, transparent, transparent);
+  mask:
+    radial-gradient(18px at 8% 80%, #0000 98%, #000) 0 0/20% 100%,
+    linear-gradient(#000 0 0);
+}
+
+.season-card {
+  background:
+    radial-gradient(circle at 82% 18%, rgba(6, 182, 212, 0.14), transparent 22%),
+    linear-gradient(135deg, rgba(20, 184, 166, 0.08), rgba(255, 255, 255, 0.96));
+}
+
+.sidebar-link {
+  color: var(--text-main);
+  background: #f8fafc;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.sidebar-link--active {
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--brand-indigo), var(--brand-violet));
+  box-shadow: 0 16px 32px rgba(79, 70, 229, 0.28);
+}
+
+.sidebar-link--active span,
+.sidebar-link--active .nav-meta {
+  color: #ffffff;
+}
+
+.profile-badge,
+.status-pill,
+.date-chip {
+  color: var(--text-main);
+  background: #eef2ff;
+  box-shadow: none;
+}
+
+.page-header h2 {
+  color: #0f172a;
+}
+
+.dashboard-banner,
+.inventory-showcase {
+  color: #ffffff;
+  border: none;
+  border-radius: 32px;
+  box-shadow: var(--shadow-strong);
+  background:
+    radial-gradient(circle at 85% 18%, rgba(255, 255, 255, 0.22), transparent 24%),
+    linear-gradient(135deg, var(--brand-indigo), var(--brand-violet) 54%, var(--brand-orange));
+}
+
+.dashboard-banner .eyebrow,
+.dashboard-banner .muted-copy,
+.inventory-showcase .eyebrow,
+.inventory-showcase .muted-copy {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.hero-panel__totals span {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: none;
+}
+
+.hero-panel__totals small {
+  color: rgba(255, 255, 255, 0.76);
+}
+
+.feature-pill,
+.mini-stat {
+  border: none;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: none;
+}
+
+.feature-pill span,
+.mini-stat span {
+  color: rgba(255, 255, 255, 0.76);
+}
+
+.feature-pill strong,
+.mini-stat strong {
+  color: #ffffff;
+}
+
+.stats-grid--floating .stat-card {
+  transform: none;
+}
+
+.stat-card {
+  color: #ffffff;
+  border: none;
+  border-radius: 24px;
+  box-shadow: var(--shadow-medium);
+}
+
+.stat-card__label,
+.stat-card__detail {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.stat-card--sage {
+  background: linear-gradient(135deg, var(--brand-teal), #0f766e);
+}
+
+.stat-card--sky {
+  background: linear-gradient(135deg, var(--brand-cyan), #2563eb);
+}
+
+.stat-card--peach {
+  background: linear-gradient(135deg, var(--brand-amber), var(--brand-orange));
+}
+
+.stat-card--sand {
+  background: linear-gradient(135deg, var(--brand-pink), #db2777);
+}
+
+.dashboard-card-grid,
+.health-card-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.dashboard-card-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.dashboard-card-grid--compact {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.dashboard-card,
+.health-card,
+.range-card,
+.catalog-card,
+.shelf-card,
+.list-row,
+.timeline-item__body {
+  background: var(--surface-white);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  box-shadow: var(--shadow-medium);
+}
+
+.dashboard-card,
+.health-card {
+  padding: 1.15rem;
+  border-radius: 24px;
+}
+
+.dashboard-card--category {
+  border-top: 6px solid var(--card-accent, #cbd5e1);
+}
+
+.dashboard-card--alert {
+  border-top: 6px solid var(--brand-orange);
+}
+
+.dashboard-card__label {
+  display: inline-flex;
+  margin-bottom: 0.8rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.dashboard-card strong {
+  display: block;
+  font-size: 1.45rem;
+  margin-bottom: 0.35rem;
+  color: var(--text-main);
+}
+
+.dashboard-card__meta {
+  margin-top: 0.85rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  color: var(--text-muted);
+}
+
+.health-card-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.health-card {
+  color: #ffffff;
+  border: none;
+}
+
+.health-card span,
+.health-card p {
+  color: rgba(255, 255, 255, 0.84);
+}
+
+.health-card strong {
+  display: block;
+  margin: 0.3rem 0 0.45rem;
+  font-size: 2rem;
+}
+
+.health-card--green {
+  background: linear-gradient(135deg, var(--brand-teal), #0f766e);
+}
+
+.health-card--amber {
+  background: linear-gradient(135deg, var(--brand-amber), var(--brand-orange));
+}
+
+.health-card--pink {
+  background: linear-gradient(135deg, var(--brand-pink), #be185d);
+}
+
+.range-showcase {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.range-card {
+  gap: 0.9rem;
+  padding: 1rem;
+  border-radius: 24px;
+}
+
+.range-card__visual {
+  min-height: 140px;
+  border-radius: 20px;
+  color: #ffffff;
+  background:
+    radial-gradient(circle at 28% 24%, rgba(255, 255, 255, 0.18), transparent 22%),
+    linear-gradient(135deg, var(--brand-indigo), var(--range-accent, #cbd5e1) 70%, var(--brand-orange));
+}
+
+.range-card__stats {
+  color: var(--text-muted);
+}
+
+.catalog-card {
+  grid-template-columns: 120px minmax(0, 1fr) 150px;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 24px;
+}
+
+.catalog-card__media {
+  min-height: 130px;
+  color: #ffffff;
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at 30% 22%, rgba(255, 255, 255, 0.2), transparent 18%),
+    linear-gradient(135deg, var(--brand-indigo), var(--product-accent, #cbd5e1) 65%, var(--brand-orange));
+}
+
+.catalog-card__topline {
+  align-items: center;
+}
+
+.catalog-card__metrics {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.catalog-card__metrics div {
+  padding: 0.8rem;
+  border-radius: 18px;
+  background: #f8fafc;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.catalog-card__actions strong {
+  color: var(--brand-indigo);
+}
+
+.auth-showcase {
+  color: #ffffff;
+  border: none;
+  background:
+    radial-gradient(circle at 82% 18%, rgba(255, 255, 255, 0.2), transparent 24%),
+    linear-gradient(135deg, #1d4ed8, var(--brand-violet) 54%, var(--brand-pink));
+}
+
+.auth-showcase .eyebrow,
+.auth-showcase .muted-copy,
+.auth-showcase p {
+  color: rgba(255, 255, 255, 0.84);
+}
+
+.showcase-pills span {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.auth-widget {
+  color: #ffffff;
+  border: none;
+}
+
+.auth-widget--tall {
+  background: linear-gradient(135deg, #0f172a, #1d4ed8);
+}
+
+.auth-widget--rose {
+  background: linear-gradient(135deg, var(--brand-orange), var(--brand-amber));
+}
+
+.auth-widget--sage {
+  background: linear-gradient(135deg, var(--brand-teal), #0284c7);
+}
+
+.auth-widget--mist {
+  background: linear-gradient(135deg, var(--brand-violet), var(--brand-pink));
+}
+
+.auth-widget__label,
+.auth-widget p {
+  color: rgba(255, 255, 255, 0.84);
+}
+
+.auth-card {
+  background: rgba(255, 255, 255, 0.96);
+}
+
+.auth-toggle {
+  background: #eef2ff;
+  border: none;
+}
+
+.toggle-button--active {
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--brand-indigo), var(--brand-violet));
+}
+
+.soft-input {
+  background: #f8fafc;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  box-shadow: none;
+}
+
+.soft-input:focus {
+  border-color: rgba(79, 70, 229, 0.5);
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.12);
+}
+
+.primary-button {
+  background: linear-gradient(135deg, var(--brand-indigo), var(--brand-violet));
+  box-shadow: 0 16px 28px rgba(79, 70, 229, 0.24);
+}
+
+.ghost-button {
+  color: var(--brand-indigo);
+  background: #eef2ff;
+  border: 1px solid rgba(99, 102, 241, 0.14);
+}
+
+.quick-note {
+  color: var(--text-main);
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.08), rgba(249, 115, 22, 0.1));
+}
+
+.timeline-item__marker {
+  background: linear-gradient(135deg, var(--brand-indigo), var(--brand-orange));
+}
+
+@media (max-width: 1180px) {
+  .app-shell,
+  .auth-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-banner,
+  .inventory-showcase,
+  .stats-grid,
+  .feature-pill-grid,
+  .mini-stats-grid,
+  .health-card-grid,
+  .dashboard-card-grid,
+  .range-showcase,
+  .catalog-card,
+  .catalog-card__metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-card-grid--compact {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .page-header__meta {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 760px) {
+  .app-shell,
+  .auth-shell {
+    padding: 0.8rem;
+  }
+
+  .sidebar-nav {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar-link {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .page-header h2,
+  .dashboard-banner h3,
+  .inventory-showcase h3,
+  .auth-showcase h1 {
+    max-width: none;
+  }
+
+  .dashboard-card-grid--compact,
+  .feature-pill-grid--compact,
+  .catalog-card__metrics,
+  .filters,
+  .field-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .catalog-card__topline,
+  .catalog-card__actions,
+  .panel-header,
+  .list-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .page-header__meta,
+  .pill-group {
+    justify-content: flex-start;
+  }
+}

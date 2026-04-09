@@ -22,7 +22,7 @@ const BoutiqueLayout = () => {
             <div>
               <h1>SoftStock</h1>
               <p className="brand-copy">
-                Soft tones, premium merchandising, and stock control for fashion-led teams.
+                Bold retail cards, cleaner stock views, and a faster dashboard for fashion teams.
               </p>
             </div>
           </div>
@@ -69,7 +69,7 @@ const BoutiqueLayout = () => {
         <header className="page-header">
           <div>
             <p className="eyebrow">Inventory management system</p>
-            <h2>Retail operations with a softer, more elevated visual rhythm</h2>
+            <h2>Retail operations with bold color, stronger hierarchy, and clearer cards</h2>
             <p className="muted-copy">
               Track stock, value, and movement across your boutique essentials in one place.
             </p>
