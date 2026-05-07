@@ -5,6 +5,7 @@ import "./styles.css";
 import "./boutique.css";
 import "./dynamic.css";
 import "./bold-cards.css";
+import "./responsive-fixes.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

@@ -1,0 +1,340 @@
+html,
+body,
+#root {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+img,
+svg,
+canvas {
+  max-width: 100%;
+}
+
+.app-shell,
+.page-shell,
+.sidebar,
+.dashboard-grid,
+.inventory-grid,
+.content-panel,
+.dashboard-banner,
+.inventory-showcase,
+.catalog-card,
+.catalog-card__body,
+.catalog-card__actions,
+.timeline-item__body,
+.health-card,
+.dashboard-card,
+.range-card,
+.feature-pill,
+.mini-stat,
+.shelf-card {
+  min-width: 0;
+}
+
+.app-shell {
+  width: 100%;
+  max-width: 100%;
+}
+
+.page-header,
+.page-header__meta,
+.panel-header,
+.filters,
+.feature-pill-grid,
+.mini-stats-grid,
+.dashboard-card-grid,
+.health-card-grid,
+.range-showcase,
+.category-shelf,
+.catalog-card__metrics,
+.field-grid,
+.auth-scene {
+  min-width: 0;
+}
+
+.page-header__meta,
+.pill-group,
+.dashboard-card__meta,
+.range-card__stats {
+  flex-wrap: wrap;
+}
+
+.sidebar-nav {
+  width: 100%;
+}
+
+.sidebar-link {
+  width: 100%;
+}
+
+.status-pill,
+.date-chip,
+.profile-badge,
+.showcase-pills span {
+  max-width: 100%;
+  text-align: center;
+}
+
+.catalog-card__description,
+.dashboard-card p,
+.timeline-item__body p,
+.range-card__meta p {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.catalog-swimlane,
+.stack-list,
+.timeline-list {
+  width: 100%;
+}
+
+.catalog-card {
+  align-items: stretch;
+}
+
+.catalog-card__media,
+.range-card__visual {
+  width: 100%;
+}
+
+.ghost-button,
+.primary-button,
+.toggle-button {
+  max-width: 100%;
+}
+
+@media (max-width: 1280px) {
+  .app-shell,
+  .auth-shell {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .sidebar {
+    order: 0;
+  }
+
+  .dashboard-grid,
+  .inventory-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-grid > .content-panel,
+  .dashboard-grid > .content-panel:nth-of-type(1),
+  .dashboard-grid > .content-panel:nth-of-type(2),
+  .dashboard-grid > .content-panel:nth-of-type(3),
+  .inventory-grid > .content-panel,
+  .inventory-grid--enhanced .inventory-list-panel,
+  .inventory-grid--enhanced .form-panel,
+  .inventory-grid--enhanced .movement-panel,
+  .movement-panel,
+  .content-panel--wide,
+  .attention-panel {
+    grid-column: span 1;
+  }
+
+  .dashboard-banner,
+  .inventory-showcase {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .feature-pill-grid,
+  .mini-stats-grid,
+  .dashboard-card-grid,
+  .health-card-grid,
+  .range-showcase,
+  .category-shelf {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dashboard-card-grid--compact {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .catalog-card {
+    grid-template-columns: 96px minmax(0, 1fr);
+  }
+
+  .catalog-card__actions {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .catalog-card__metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .auth-scene {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: auto;
+  }
+
+  .auth-widget--tall {
+    grid-column: span 2;
+    grid-row: span 1;
+    min-height: 220px;
+  }
+
+  .auth-card {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .app-shell,
+  .auth-shell {
+    padding: 0.9rem;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .page-header__meta {
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  .panel-header,
+  .panel-header--tight,
+  .catalog-card__topline,
+  .timeline-item__topline,
+  .list-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .filters,
+  .field-grid,
+  .feature-pill-grid--compact,
+  .catalog-card__metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .field-span-2 {
+    grid-column: span 1;
+  }
+
+  .catalog-card {
+    grid-template-columns: 1fr;
+  }
+
+  .catalog-card__actions {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+
+  .auth-scene,
+  .feature-pill-grid,
+  .mini-stats-grid,
+  .dashboard-card-grid,
+  .health-card-grid,
+  .range-showcase,
+  .category-shelf {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-card-grid--compact {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .app-shell,
+  .auth-shell {
+    padding: 0.75rem;
+  }
+
+  .brand-card,
+  .season-card,
+  .profile-card,
+  .content-panel,
+  .auth-card,
+  .auth-showcase,
+  .dashboard-banner,
+  .inventory-showcase,
+  .stat-card,
+  .catalog-card,
+  .range-card,
+  .dashboard-card,
+  .health-card,
+  .shelf-card,
+  .timeline-item__body,
+  .list-row {
+    border-radius: 20px;
+  }
+
+  .auth-showcase,
+  .auth-card,
+  .dashboard-banner,
+  .inventory-showcase,
+  .content-panel,
+  .brand-card,
+  .season-card,
+  .profile-card {
+    padding: 1rem;
+  }
+
+  .brand-mark {
+    align-items: flex-start;
+  }
+
+  .brand-mark__seal {
+    width: 48px;
+    height: 48px;
+  }
+
+  .brand-card h1 {
+    font-size: 2rem;
+  }
+
+  .auth-showcase h1,
+  .page-header h2,
+  .dashboard-banner h3,
+  .inventory-showcase h3 {
+    max-width: none;
+    font-size: clamp(1.8rem, 8vw, 2.4rem);
+  }
+
+  .hero-panel__totals span,
+  .feature-pill,
+  .mini-stat,
+  .dashboard-card,
+  .health-card,
+  .range-card,
+  .catalog-card__metrics div {
+    padding: 0.85rem;
+  }
+
+  .showcase-pills,
+  .page-header__meta,
+  .pill-group,
+  .dashboard-card__meta,
+  .range-card__stats {
+    gap: 0.45rem;
+  }
+
+  .status-pill,
+  .date-chip,
+  .profile-badge {
+    width: auto;
+    max-width: 100%;
+  }
+}
